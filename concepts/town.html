@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Narne Labs · Mock F: Narne Town</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --wall: #e6e7e9; --ink: #141516; --muted: #5f6266; --ui: "Barlow", system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--wall); color: var(--ink); font: 18px/1.55 var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  header { max-width: 1240px; margin: 0 auto; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; text-decoration: none; }
+  .brand img { height: 34px; width: auto; }
+  header nav { display: flex; gap: 26px; font-size: 16px; font-weight: 500; }
+  header nav a { text-decoration: none; color: var(--muted); } header nav a:hover { color: var(--ink); }
+  @media (max-width: 600px) { header nav a:not(:last-child) { display: none; } }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 22px 28px 40px; text-align: center; }
+  .hero h1 { margin: 0 auto; font-weight: 700; font-size: clamp(32px, 4.2vw, 54px); line-height: 1.05; letter-spacing: -.015em; }
+  .hero > p { margin: 12px auto 0; color: var(--muted); font-size: 19px; max-width: 46ch; }
+
+  .town { position: relative; margin: 10px auto 0; width: min(1180px, 100%); }
+  .town svg { display: block; width: 100%; height: auto; overflow: visible; user-select: none; -webkit-user-select: none; }
+  .pin { cursor: pointer; }
+  .pin rect { fill: #fff; stroke: #141516; transition: fill .2s; }
+  .pin text { font-family: var(--ui); font-weight: 700; fill: #141516; }
+  .pin:hover rect, .pin:focus rect { fill: #141516; } .pin:hover text, .pin:focus text { fill: #fff; }
+  .pin:focus { outline: none; }
+  .bld { cursor: pointer; }
+
+  .panel { position: absolute; left: 0; bottom: 8%; width: min(340px, 92%); text-align: left; background: #fff; border-radius: 14px; padding: 18px 20px; box-shadow: 0 24px 50px -24px rgba(0,0,0,.45); opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .35s, transform .35s; }
+  .panel.on { opacity: 1; transform: none; pointer-events: auto; }
+  .panel .st { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .panel .st i { width: 8px; height: 8px; border-radius: 50%; background: var(--c, #20a35a); }
+  .panel h2 { margin: 8px 0 4px; font-size: 24px; line-height: 1.15; }
+  .panel p { margin: 0; color: var(--muted); font-size: 16px; }
+  .panel .acts { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .panel a, .panel button { font: 600 15px var(--ui); border-radius: 999px; padding: 9px 16px; border: 1.5px solid var(--ink); text-decoration: none; cursor: pointer; }
+  .panel a { background: var(--ink); color: #fff; } .panel button { background: transparent; color: var(--ink); }
+  @media (max-width: 700px) { .panel { position: relative; left: auto; bottom: auto; margin: 12px auto 0; width: 100%; display: none; } .panel.on { display: block; } }
+  .help { margin-top: 6px; color: var(--muted); font-size: 15px; }
+
+  .facts { max-width: 1240px; margin: 0 auto; padding: 30px 28px; display: flex; flex-wrap: wrap; gap: 18px 48px; justify-content: center; border-top: 1px solid #cfd0d3; }
+  .facts div { text-align: center; } .facts b { display: block; font-size: 30px; line-height: 1.1; } .facts span { color: var(--muted); font-size: 15px; }
+  footer { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 15px; border-top: 1px solid #cfd0d3; }
+  footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#"><img src="/assets/img/kalki.svg" alt="">Narne Labs</a>
+  <nav><a href="#apps">Apps</a><a href="#studio">Studio</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
+</header>
+
+<section class="hero" id="apps">
+  <h1>Small apps for everyday problems.</h1>
+  <p>Welcome to Narne Town. Every building is one of our apps, and the town grows each time we ship.</p>
+  <div class="town" id="town">
+    <svg id="svg" role="img" aria-label="Narne Town: an isometric town where each building is a Narne Labs app"></svg>
+    <div class="panel" id="panel" aria-live="polite">
+      <span class="st" id="pst"><i></i><span></span></span>
+      <h2 id="ph"></h2><p id="pp"></p>
+      <div class="acts"><a id="pa" href="#">Open</a><button id="back">← Back to town</button></div>
+    </div>
+  </div>
+  <p class="help">Click a building to visit it.</p>
+</section>
+
+<section class="facts" id="studio">
+  <div><b>2</b><span>apps out, more on the way</span></div>
+  <div><b>1</b><span>under construction</span></div>
+  <div><b>0</b><span>ads or paywalls in any of our apps</span></div>
+</section>
+
+<footer>
+  <span>© 2026 Narne Labs · <a href="mailto:hello@narnelabs.com">hello@narnelabs.com</a></span>
+  <nav><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+</footer>
+
+<script>
+(() => {
+  /* ======================= isometric toolkit ======================= */
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('svg');
+  const U = 24, C = 0.866 * U, S = 0.5 * U;
+  const P = (x, y, z = 0) => [(x - y) * C, (x + y) * S - z * U];
+  const fmt = (a) => a.map((p) => P(...p).map((v) => v.toFixed(1)).join(',')).join(' ');
+  const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.append(e); return e; };
+  const poly = (g, a, fill, extra = {}) => el('polygon', { points: fmt(a), fill, ...extra }, g);
+  const defs = el('defs', {}, svg);
+
+  // colour helpers + cached soft vertical gradients so walls catch the light
+  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const toHex = (c) => '#' + c.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  const tint = (h, k) => { const c = hex(h); return toHex(c.map((v) => (k > 0 ? v + (255 - v) * k : v * (1 + k)))); };
+  const gradCache = {};
+  function grad(h, top = 0.06, bot = -0.05) {
+    const id = 'g' + h.slice(1) + (top * 100 | 0) + (bot * 100 | 0);
+    if (!gradCache[id]) {
+      const g = el('linearGradient', { id, x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      el('stop', { offset: 0, 'stop-color': tint(h, top) }, g); el('stop', { offset: 1, 'stop-color': tint(h, bot) }, g);
+      gradCache[id] = `url(#${id})`;
+    }
+    return gradCache[id];
+  }
+  // sun from the upper left: tops brightest, left faces mid, right faces darkest
+  function box(g, x, y, z, w, d, h, base, o = {}) {
+    const top = o.top || tint(base, 0.14), left = o.left || base, right = o.right || tint(base, -0.13);
+    const shade = (c) => (o.flat || c.startsWith('url(') ? c : grad(c)); // fills that are already gradients pass straight through
+    poly(g, [[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + h], [x + w, y, z + h]], shade(right));
+    poly(g, [[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + h], [x, y + d, z + h]], shade(left));
+    poly(g, [[x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h]], top);
+  }
+  // ground shadow cast toward +x (sun from the left)
+  function hull(pts) {
+    pts = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lo = [], up = [];
+    for (const p of pts) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+    for (const p of pts.slice().reverse()) { while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); }
+    return lo.slice(0, -1).concat(up.slice(0, -1));
+  }
+  function shadow(g, x, y, w, d, h, z = 0, a = 0.16) {
+    const ox = h * 0.62, oy = -h * 0.12, foot = [[x, y], [x + w, y], [x + w, y + d], [x, y + d]];
+    const pts = hull(foot.concat(foot.map(([a2, b]) => [a2 + ox, b + oy]))).map(([a2, b]) => P(a2, b, z));
+    el('polygon', { points: pts.map((p) => p.map((v) => v.toFixed(1)).join(',')).join(' '), fill: `rgba(40,48,60,${a})` }, g);
+  }
+  // text painted onto a wall: 'L' = the y-facing wall, 'R' = the x-facing wall
+  function wallText(g, face, x, y, z, text, size, fill, weight = 800, anchor = 'start', maxTiles = 0) {
+    const [ex, ey] = P(x, y, z);
+    const m = face === 'L' ? [C / U, S / U, 0, 1] : [C / U, -S / U, 0, 1];
+    const t = el('text', { transform: `matrix(${m.join(',')},${ex.toFixed(1)},${ey.toFixed(1)})`, fill, 'font-family': 'Barlow, sans-serif', 'font-weight': weight, 'font-size': size, 'text-anchor': anchor, 'letter-spacing': 0.5 }, g);
+    t.textContent = text;
+    if (maxTiles) { const len = t.getComputedTextLength(), max = maxTiles * U; if (len > max) t.setAttribute('font-size', (size * max / len).toFixed(2)); }
+    return t;
+  }
+  // a window on a wall, with a frame and a glass reflection
+  el('linearGradient', { id: 'glass', x1: 0, y1: 0, x2: 1, y2: 1 }, defs).innerHTML = '<stop offset="0" stop-color="#4f6884"/><stop offset=".42" stop-color="#7f97b2"/><stop offset=".5" stop-color="#3b4f66"/><stop offset="1" stop-color="#26333f"/>';
+  el('linearGradient', { id: 'lit', x1: 0, y1: 0, x2: 0, y2: 1 }, defs).innerHTML = '<stop offset="0" stop-color="#ffe2a3"/><stop offset="1" stop-color="#ffc76a"/>';
+  el('linearGradient', { id: 'chrome', x1: 0, y1: 0, x2: 1, y2: 0 }, defs).innerHTML = '<stop offset="0" stop-color="#8d939a"/><stop offset=".45" stop-color="#f2f4f6"/><stop offset="1" stop-color="#7d838a"/>';
+  function pane(g, face, x, y, z, w, h, fill = 'url(#glass)', frame = '#f7f7f5') {
+    const q = face === 'L' ? [[x, y, z], [x + w, y, z], [x + w, y, z + h], [x, y, z + h]] : [[x, y, z], [x, y - w, z], [x, y - w, z + h], [x, y, z + h]];
+    poly(g, q, frame);
+    const i = 0.05, qi = face === 'L' ? [[x + i, y, z + i], [x + w - i, y, z + i], [x + w - i, y, z + h - i], [x + i, y, z + h - i]] : [[x, y - i, z + i], [x, y - w + i, z + i], [x, y - w + i, z + h - i], [x, y - i, z + h - i]];
+    poly(g, qi, fill);
+    const l = 0.075, ql = face === 'L' ? [[x + i, y, z + h - i - l], [x + w - i, y, z + h - i - l], [x + w - i, y, z + h - i], [x + i, y, z + h - i]] : [[x, y - i, z + h - i - l], [x, y - w + i, z + h - i - l], [x, y - w + i, z + h - i], [x, y - i, z + h - i]];
+    poly(g, ql, 'rgba(0,0,0,.22)');
+  }
+  /* Evenly spaced windows that always sit inside the wall.
+     face 'L' = the wall at y + d (runs along x), 'R' = the wall at x + w (runs along y, read right to left).
+     o: { from, to } along the wall (default the whole wall, minus margins), bays, floors, fh (floor height),
+        z0, sill, wh (window height), fill (share of each bay that is glass), skip(f, i), lit(f, i), frame */
+  function facade(g, face, b, o) {
+    const len = face === 'L' ? b.w : b.d, from = o.from ?? 0, to = o.to ?? len, m = o.margin ?? 0.22;
+    const span = to - from - 2 * m, bw = span / o.bays, ww = bw * (o.fill ?? 0.62);
+    for (let f = 0; f < (o.floors ?? 1); f++) {
+      const z = (o.z0 ?? 0) + f * (o.fh ?? 1) + (o.sill ?? 0.2);
+      for (let i = 0; i < o.bays; i++) {
+        if (o.skip && o.skip(f, i)) continue;
+        const off = from + m + i * bw + (bw - ww) / 2, glass = o.lit && o.lit(f, i) ? 'url(#lit)' : 'url(#glass)';
+        if (face === 'L') pane(g, 'L', b.x + off, b.y + b.d, z, ww, o.wh, glass, o.frame);
+        else pane(g, 'R', b.x + b.w, b.y + b.d - off, z, ww, o.wh, glass, o.frame);
+      }
+    }
+  }
+  // thin horizontal band on a wall (floor lines, plinths)
+  function band(g, face, b, z, h, fill) {
+    const q = face === 'L' ? [[b.x, b.y + b.d, z], [b.x + b.w, b.y + b.d, z], [b.x + b.w, b.y + b.d, z + h], [b.x, b.y + b.d, z + h]]
+                           : [[b.x + b.w, b.y + b.d, z], [b.x + b.w, b.y, z], [b.x + b.w, b.y, z + h], [b.x + b.w, b.y + b.d, z + h]];
+    poly(g, q, fill);
+  }
+  // circle lying flat on the ground (an iso ellipse)
+  const flatCircle = (g, x, y, r, attrs, z = 0) => { const [cx, cy] = P(x, y, z); return el('ellipse', { cx, cy, rx: r * Math.SQRT2 * C, ry: r * Math.SQRT2 * S, ...attrs }, g); };
+
+  function tree(g, sh, x, y, s = 1, kind = 'round') {
+    flatCircle(sh, x + 0.35 * s, y - 0.05, 0.42 * s, { fill: 'rgba(40,48,60,.16)' });
+    box(g, x - 0.06, y - 0.06, 0, 0.12, 0.12, 0.55 * s, '#8a6a4a', { flat: true });
+    if (kind === 'pine') {
+      const [bx, by] = P(x, y, 0.4 * s), [tx, ty] = P(x, y, 1.9 * s), r = 0.55 * s * U;
+      el('polygon', { points: `${bx - r},${by} ${tx},${ty} ${bx},${by + r * 0.25}`, fill: '#5f9a5a' }, g);
+      el('polygon', { points: `${bx + r},${by} ${tx},${ty} ${bx},${by + r * 0.25}`, fill: '#4c8349' }, g);
+    } else {
+      const [cx, cy] = P(x, y, 1.05 * s), id = 'tr' + (s * 10 | 0);
+      if (!document.getElementById(id)) el('radialGradient', { id, cx: 0.35, cy: 0.3, r: 0.75 }, defs).innerHTML = '<stop offset="0" stop-color="#bfe0a2"/><stop offset=".55" stop-color="#8fbe72"/><stop offset="1" stop-color="#6c9e57"/>';
+      el('circle', { cx, cy, r: 0.52 * s * U, fill: `url(#${id})` }, g);
+    }
+  }
+  function lamp(g, sh, x, y) {
+    flatCircle(sh, x + 0.4, y, 0.12, { fill: 'rgba(40,48,60,.14)' });
+    box(g, x - 0.04, y - 0.04, 0, 0.08, 0.08, 1.5, '#4a4f55', { flat: true });
+    const [lx, ly] = P(x, y, 1.55);
+    el('circle', { cx: lx, cy: ly, r: 2.6, fill: '#fff4d6' }, g);
+  }
+
+  /* ======================= the town ======================= */
+  const N = 14;
+  const layer = (n) => el('g', { 'data-layer': n }, svg);
+  const Lground = layer('ground'), Lshadow = layer('shadow'), Lclouds = layer('clouds'), Lhq = layer('hq'), LyBack = layer('yBack'),
+        Lfactory = layer('factory'), Lmid = layer('mid'), Lpark = layer('park'), LyFront = layer('yFront'), Llab = layer('lab'), Lpins = layer('pins');
+
+  // diorama base: concrete top, kerb band, soil underneath, soft shadow below
+  const [sx0, sy0] = P(N / 2, N / 2, -1.2);
+  el('filter', { id: 'soft', x: '-50%', y: '-50%', width: '200%', height: '200%' }, defs).innerHTML = '<feGaussianBlur stdDeviation="14"/>';
+  el('ellipse', { cx: sx0, cy: sy0 + 40, rx: N * C * 1.05, ry: N * S * 0.55, fill: 'rgba(30,35,45,.22)', filter: 'url(#soft)' }, Lground);
+  box(Lground, 0, 0, -1.0, N, N, 0.75, '#9c8564', { flat: true, top: '#9c8564' });
+  box(Lground, 0, 0, -0.25, N, N, 0.25, '#d2d3cf', { top: '#eceeea' });
+
+  // lawns, sidewalks with a kerb, asphalt, markings
+  const quads = [[0, 0], [7.8, 0], [0, 7.8], [7.8, 7.8]];
+  for (const [x, y] of quads) {
+    box(Lground, x + 0.15, y + 0.15, 0, 6.05 - 0.3, 6.05 - 0.3, 0.07, '#d9d9d4', { top: '#ececE8' });       // sidewalk slab + kerb
+    poly(Lground, [[x + 0.6, y + 0.6, 0.071], [x + 5.6, y + 0.6, 0.071], [x + 5.6, y + 5.6, 0.071], [x + 0.6, y + 5.6, 0.071]], '#d7e7c3'); // lawn
+  }
+  poly(Lground, [[0, 6.2, 0.005], [N, 6.2, 0.005], [N, 7.8, 0.005], [0, 7.8, 0.005]], '#b4b7bc');
+  poly(Lground, [[6.2, 0, 0.005], [7.8, 0, 0.005], [7.8, N, 0.005], [6.2, N, 0.005]], '#b4b7bc');
+  for (let i = 0.4; i < N; i += 1.3) {
+    if (i > 5.2 && i < 8.4) continue;
+    poly(Lground, [[i, 6.97, 0.01], [i + 0.65, 6.97, 0.01], [i + 0.65, 7.03, 0.01], [i, 7.03, 0.01]], '#f4f4f1');
+    poly(Lground, [[6.97, i, 0.01], [7.03, i, 0.01], [7.03, i + 0.65, 0.01], [6.97, i + 0.65, 0.01]], '#f4f4f1');
+  }
+  for (let k = 0; k < 6; k++) { // zebra crossings on all four arms of the junction
+    const o = 6.35 + k * 0.25;
+    poly(Lground, [[5.55, o, 0.01], [6.05, o, 0.01], [6.05, o + 0.13, 0.01], [5.55, o + 0.13, 0.01]], '#f4f4f1');
+    poly(Lground, [[7.95, o, 0.01], [8.45, o, 0.01], [8.45, o + 0.13, 0.01], [7.95, o + 0.13, 0.01]], '#f4f4f1');
+    poly(Lground, [[o, 5.55, 0.01], [o + 0.13, 5.55, 0.01], [o + 0.13, 6.05, 0.01], [o, 6.05, 0.01]], '#f4f4f1');
+    poly(Lground, [[o, 7.95, 0.01], [o + 0.13, 7.95, 0.01], [o + 0.13, 8.45, 0.01], [o, 8.45, 0.01]], '#f4f4f1');
+  }
+  lamp(Lhq, Lshadow, 0.4, 5.4); lamp(Llab, Lshadow, 13.6, 8.6);
+
+  // ---------------- Narne Labs HQ ----------------
+  // four floors of evenly spaced windows, a glass lobby with a canopy, and a proper roof:
+  // parapet on all four sides, tilted solar panels, a plant room and the rooftop sign
+  const hq = el('g', { class: 'bld', 'data-id': 'hq' }, Lhq);
+  const H = { x: 1.3, y: 1.1, w: 3.9, d: 3.7 }, FL = 4, FH = 0.88; H.h = FL * FH + 0.14;
+  const lit = (seed) => (f, i) => ((f * 131 + i * 71 + seed) % 7) === 0;
+  shadow(Lshadow, H.x, H.y, H.w, H.d, H.h + 0.2);
+  box(hq, H.x, H.y, 0, H.w, H.d, H.h, '#eeeeeb', { top: '#dedfdb' });
+  band(hq, 'L', H, 0, 0.1, '#d6d7d3'); band(hq, 'R', H, 0, 0.1, '#c4c5c1');                       // plinth
+  for (let f = 1; f < FL; f++) { band(hq, 'L', H, f * FH - 0.015, 0.03, '#dcdcd8'); band(hq, 'R', H, f * FH - 0.015, 0.03, '#c9cac6'); } // floor lines
+  const LOBBY = [1, 3]; // bays 1-3 of the front wall are the lobby on the ground floor
+  facade(hq, 'L', H, { bays: 5, floors: FL, fh: FH, sill: 0.2, wh: 0.5, frame: '#e4e4e1', lit: lit(3), skip: (f, i) => f === 0 && i >= LOBBY[0] && i <= LOBBY[1] });
+  facade(hq, 'R', H, { bays: 5, floors: FL, fh: FH, sill: 0.2, wh: 0.5, frame: '#d4d5d1', lit: lit(5) });
+  // lobby: full-height glass with mullions and a pair of doors, under a canopy
+  { const m = 0.22, bw = (H.w - 2 * m) / 5, x0 = H.x + m + LOBBY[0] * bw + 0.05, x1 = H.x + m + (LOBBY[1] + 1) * bw - 0.05, y = H.y + H.d;
+    poly(hq, [[x0, y, 0.06], [x1, y, 0.06], [x1, y, 0.74], [x0, y, 0.74]], '#2e3a47');
+    for (let x = x0 + 0.05; x < x1 - 0.04; x += (x1 - x0 - 0.1) / 6) poly(hq, [[x, y, 0.08], [x + (x1 - x0 - 0.1) / 6 - 0.03, y, 0.08], [x + (x1 - x0 - 0.1) / 6 - 0.03, y, 0.72], [x, y, 0.72]], 'url(#glass)');
+    const xm = (x0 + x1) / 2; poly(hq, [[xm - 0.22, y, 0.06], [xm + 0.22, y, 0.06], [xm + 0.22, y, 0.6], [xm - 0.22, y, 0.6]], '#1f2731');
+    poly(hq, [[xm - 0.01, y, 0.06], [xm + 0.01, y, 0.06], [xm + 0.01, y, 0.6], [xm - 0.01, y, 0.6]], '#9aa1a9');
+    box(hq, x0 - 0.1, y, 0.8, x1 - x0 + 0.2, 0.5, 0.06, '#f7f7f4');
+    box(hq, x0 - 0.06, y + 0.42, 0, 0.05, 0.05, 0.8, '#9aa1a9', { flat: true }); box(hq, x1 + 0.01, y + 0.42, 0, 0.05, 0.05, 0.8, '#9aa1a9', { flat: true }); }
+  // roof: back parapets first, then everything on the roof, then the front parapets
+  const RZ = H.h, PH = 0.18, PT = 0.1;
+  box(hq, H.x, H.y, RZ, PT, H.d, PH, '#e7e7e4'); box(hq, H.x, H.y, RZ, H.w, PT, PH, '#e7e7e4');
+  // plant room with louvres and a fan
+  const PRm = { x: H.x + H.w - 1.35, y: H.y + 0.3, w: 1.0, d: 0.95 };
+  box(hq, PRm.x, PRm.y, RZ, PRm.w, PRm.d, 0.55, '#dcdcd8');
+  for (let k = 0; k < 4; k++) poly(hq, [[PRm.x + 0.12, PRm.y + PRm.d, RZ + 0.12 + k * 0.09], [PRm.x + PRm.w - 0.12, PRm.y + PRm.d, RZ + 0.12 + k * 0.09], [PRm.x + PRm.w - 0.12, PRm.y + PRm.d, RZ + 0.15 + k * 0.09], [PRm.x + 0.12, PRm.y + PRm.d, RZ + 0.15 + k * 0.09]], '#b9bab6');
+  flatCircle(hq, PRm.x + 0.5, PRm.y + 0.45, 0.24, { fill: '#c4c5c1', stroke: '#a9aaa6', 'stroke-width': 1 }, RZ + 0.55);
+  // solar array: 2 rows x 3 panels, tilted toward the street, inside the parapet
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) {
+    const px = H.x + 0.32 + c * 0.66, py = H.y + 0.32 + r * 0.82, pw = 0.58, pd = 0.5, lo = RZ + 0.07, hi = RZ + 0.33;
+    poly(hq, [[px + pw, py, lo], [px + pw, py + pd, lo], [px + pw, py, hi]], '#8d939a');                    // side bracket
+    poly(hq, [[px, py, hi], [px + pw, py, hi], [px + pw, py + pd, lo], [px, py + pd, lo]], '#26406a');      // panel
+    for (let k = 1; k < 3; k++) { const yy = py + (pd * k) / 3, zz = hi - ((hi - lo) * k) / 3; poly(hq, [[px, yy, zz], [px + pw, yy, zz], [px + pw, yy + 0.012, zz - 0.005], [px, yy + 0.012, zz - 0.005]], '#4b6a99'); }
+    for (let k = 1; k < 4; k++) { const xx = px + (pw * k) / 4; poly(hq, [[xx, py, hi], [xx + 0.012, py, hi], [xx + 0.012, py + pd, lo], [xx, py + pd, lo]], '#4b6a99'); }
+    poly(hq, [[px + 0.03, py + 0.03, hi - 0.01], [px + pw * 0.4, py + 0.03, hi - 0.01], [px + pw * 0.25, py + pd * 0.45, hi - 0.12], [px + 0.03, py + pd * 0.45, hi - 0.12]], 'rgba(255,255,255,.12)'); // sky reflection
+  }
+  // rooftop sign on its own posts, set back from the front edge
+  { const sy = H.y + H.d - 0.42, sx0 = H.x + 0.45, sx1 = H.x + H.w - 0.45;
+    box(hq, sx0 + 0.15, sy, RZ, 0.06, 0.06, 0.62, '#5b6068', { flat: true }); box(hq, sx1 - 0.21, sy, RZ, 0.06, 0.06, 0.62, '#5b6068', { flat: true });
+    box(hq, sx0, sy + 0.06, RZ + 0.55, sx1 - sx0, 0.05, 0.5, '#151617', { flat: true });
+    wallText(hq, 'L', sx0 + 0.14, sy + 0.11, RZ + 0.68, 'NARNE LABS', 12, '#ffffff', 800, 'start', sx1 - sx0 - 0.28); }
+  box(hq, H.x, H.y + H.d - PT, RZ, H.w, PT, PH, '#eeeeeb', { top: '#f4f4f1' }); box(hq, H.x + H.w - PT, H.y, RZ, PT, H.d, PH, '#eeeeeb', { top: '#f4f4f1' });
+  tree(Lhq, Lshadow, 5.5, 1.0, 0.9); tree(Lhq, Lshadow, 0.7, 5.3, 0.8, 'pine');
+
+  // ---------------- CompressYourVideo factory ----------------
+  const fac = el('g', { class: 'bld', 'data-id': 'cyv' }, Lfactory);
+  const F = { x: 8.5, y: 0.9, w: 4.6, d: 3.4, h: 2.1 };
+  shadow(Lshadow, F.x, F.y, F.w, F.d, F.h + 0.5);
+  // chimney with red and white bands, sits behind the sheds
+  for (let k = 0; k < 6; k++) box(fac, 12.2, 1.05, k * 0.75, 0.42, 0.42, 0.75, k % 2 ? '#f2f1ee' : '#d4483b');
+  const steam = el('g', {}, fac);
+  box(fac, F.x, F.y, 0, F.w, F.d, F.h, '#ece9f4');
+  box(fac, F.x, F.y + F.d - 0.01, 0, F.w, 0.02, 0.35, '#c9c2dc', { flat: true }); // plinth band
+  // saw-tooth roof with north lights
+  for (let i = 0; i < 4; i++) {
+    const x0 = F.x + i * (F.w / 4), x1 = x0 + F.w / 4, z0 = F.h, z1 = F.h + 0.7;
+    poly(fac, [[x0, F.y, z0], [x1, F.y, z1], [x1, F.y + F.d, z1], [x0, F.y + F.d, z0]], '#f4f2f9');
+    poly(fac, [[x1, F.y, z0], [x1, F.y + F.d, z0], [x1, F.y + F.d, z1], [x1, F.y, z1]], 'url(#glass)');
+    poly(fac, [[x0, F.y + F.d, z0], [x1, F.y + F.d, z0], [x1, F.y + F.d, z1]], '#e2ddee');
+  }
+  // sign + roll-up door + side windows
+  box(fac, F.x + F.w, F.y + 0.3, 1.2, 0.05, F.d - 0.6, 0.78, '#7c3aed', { flat: true });
+  wallText(fac, 'R', F.x + F.w + 0.05, F.y + F.d - 0.45, 1.6, 'COMPRESS', 10, '#ffffff', 800, 'start', 2.5);
+  wallText(fac, 'R', F.x + F.w + 0.05, F.y + F.d - 0.45, 1.27, 'YOUR VIDEO', 10, '#ffffff', 800, 'start', 2.5);
+  poly(fac, [[F.x + 2.9, F.y + F.d, 0.02], [F.x + 4.1, F.y + F.d, 0.02], [F.x + 4.1, F.y + F.d, 1.15], [F.x + 2.9, F.y + F.d, 1.15]], '#9da3ab');
+  for (let z = 0.1; z < 1.15; z += 0.12) poly(fac, [[F.x + 2.9, F.y + F.d, z], [F.x + 4.1, F.y + F.d, z], [F.x + 4.1, F.y + F.d, z + 0.03], [F.x + 2.9, F.y + F.d, z + 0.03]], '#868c94');
+  facade(fac, 'L', F, { from: 0, to: 2.75, bays: 3, z0: 0, sill: 0.4, wh: 0.72 });
+  facade(fac, 'R', F, { bays: 4, z0: 0, sill: 0.28, wh: 0.62 });
+  // conveyor + press frame (animated ram and parcels drawn each frame)
+  const CV = { x: 8.6, y: 4.75, w: 4.6, d: 0.8 };
+  shadow(Lshadow, CV.x, CV.y, CV.w, CV.d, 0.4);
+  box(fac, CV.x, CV.y, 0, CV.w, CV.d, 0.32, '#5b6068');
+  const belt = el('g', {}, fac);
+  const PR = { x: 10.45, y: 4.65 };
+  shadow(Lshadow, PR.x - 0.1, PR.y, 1.3, 1.0, 2.8, 0, 0.12);
+  box(fac, PR.x - 0.1, PR.y - 0.05, 0, 1.3, 0.25, 0.32, '#f2c230'); // hazard base
+  for (let k = 0; k < 5; k++) poly(fac, [[PR.x - 0.05 + k * 0.26, PR.y + 0.2, 0.05], [PR.x + 0.07 + k * 0.26, PR.y + 0.2, 0.05], [PR.x + 0.17 + k * 0.26, PR.y + 0.2, 0.27], [PR.x + 0.05 + k * 0.26, PR.y + 0.2, 0.27]], '#1d1e20');
+  box(fac, PR.x, PR.y, 0.32, 0.16, 0.16, 2.5, '#9aa1a9', { left: 'url(#chrome)' });
+  box(fac, PR.x + 1.0, PR.y, 0.32, 0.16, 0.16, 2.5, '#9aa1a9', { left: 'url(#chrome)' });
+  const pressMove = el('g', {}, fac);
+  const pressTop = el('g', {}, fac);
+  box(pressTop, PR.x - 0.05, PR.y - 0.05, 2.82, 1.26, 0.9, 0.32, '#7c3aed');
+  wallText(pressTop, 'L', PR.x + 0.12, PR.y + 0.85, 2.9, 'PRESS', 7, '#ffffff', 800, 'start', 1.0);
+
+  // ---------------- Pradakshina park ----------------
+  const park = el('g', { class: 'bld', 'data-id': 'prd' }, Lpark);
+  const PK = { cx: 3.0, cy: 10.9 };
+  // hedge border
+  for (const [x, y, w, d] of [[0.75, 8.55, 4.9, 0.25], [0.75, 8.55, 0.25, 4.9]]) { shadow(Lshadow, x, y, w, d, 0.35, 0.07, 0.1); box(park, x, y, 0.07, w, d, 0.35, '#5e9452'); }
+  flatCircle(park, PK.cx, PK.cy, 2.05, { fill: '#e9d8b4', stroke: '#d7c299', 'stroke-width': 1 }, 0.075);
+  flatCircle(park, PK.cx, PK.cy, 1.55, { fill: '#cfe3b6' }, 0.08);
+  // flower beds
+  [[1.6, 9.5], [4.4, 9.6], [1.7, 12.3], [4.3, 12.2]].forEach(([x, y], i) => {
+    flatCircle(park, x, y, 0.32, { fill: '#b9d49c' }, 0.085);
+    for (let k = 0; k < 7; k++) { const a = k * 0.9 + i, [fx, fy] = P(x + Math.cos(a) * 0.18, y + Math.sin(a) * 0.18, 0.12); el('circle', { cx: fx, cy: fy, r: 1.6, fill: ['#ff6b6b', '#ffd166', '#f78fb3', '#ffffff'][k % 4] }, park); }
+  });
+  // fountain
+  flatCircle(park, PK.cx, PK.cy, 0.72, { fill: '#cfd2d6' }, 0.08);
+  box(park, PK.cx - 0.7, PK.cy + 0.55, 0.08, 1.4, 0.04, 0.16, '#c1c5ca', { flat: true });
+  flatCircle(park, PK.cx, PK.cy, 0.6, { fill: '#8fc6e8' }, 0.2);
+  const ripples = el('g', {}, park), jet = el('g', {}, park);
+  // benches + lamps
+  const parkFront = el('g', {}, park); // things in front of the jogging path, re-appended after the joggers
+  [[1.0, 10.9, park], [5.1, 10.9, parkFront]].forEach(([x, y, g]) => { shadow(Lshadow, x - 0.1, y - 0.3, 0.2, 0.6, 0.25, 0.08, 0.12); box(g, x - 0.1, y - 0.3, 0.2, 0.2, 0.6, 0.06, '#9a7552'); box(g, x - 0.12, y - 0.3, 0.26, 0.04, 0.6, 0.2, '#8a6747'); });
+  lamp(park, Lshadow, 2.0, 9.0); lamp(park, Lshadow, 2.3, 13.1);
+  // lap board
+  box(parkFront, 4.45, 13.08, 0.07, 0.08, 0.08, 1.0, '#3a3d42', { flat: true }); box(parkFront, 5.45, 13.08, 0.07, 0.08, 0.08, 1.0, '#3a3d42', { flat: true });
+  box(parkFront, 4.3, 13.0, 1.0, 1.35, 0.16, 0.55, '#141516', { flat: true });
+  const lapText = wallText(parkFront, 'L', 4.42, 13.16, 1.16, 'LAP 01', 9, '#ffb547', 800, 'start', 1.1);
+  tree(park, Lshadow, 1.2, 13.0, 0.75, 'pine'); tree(park, Lshadow, 5.3, 9.0, 0.7);
+  const joggers = [];
+
+  // ---------------- construction site ----------------
+  const site = el('g', { class: 'bld', 'data-id': 'lab' }, Llab);
+  poly(site, [[8.4, 8.4, 0.075], [13.2, 8.4, 0.075], [13.2, 13.2, 0.075], [8.4, 13.2, 0.075]], '#d8c7a3');
+  for (let k = 0; k < 3; k++) poly(site, [[8.6 + k * 0.18, 9.2, 0.08], [8.68 + k * 0.18, 9.2, 0.08], [8.68 + k * 0.18, 13.0, 0.08], [8.6 + k * 0.18, 13.0, 0.08]], 'rgba(120,96,60,.18)');
+  // the building going up: two finished floors, a frame for the third
+  const B = { x: 9.6, y: 9.2, w: 2.7, d: 2.6 };
+  shadow(Lshadow, B.x, B.y, B.w, B.d, 2.6);
+  box(site, B.x, B.y, 0, B.w, B.d, 0.3, '#bfc0bc');
+  for (let f = 0; f < 2; f++) {
+    for (const [cx, cy] of [[0, 0], [B.w - 0.18, 0], [0, B.d - 0.18], [B.w - 0.18, B.d - 0.18], [B.w / 2, B.d - 0.18], [B.w - 0.18, B.d / 2]]) box(site, B.x + cx, B.y + cy, 0.3 + f * 0.95, 0.18, 0.18, 0.85, '#c9cac6');
+    box(site, B.x, B.y, 1.15 + f * 0.95, B.w, B.d, 0.12, '#d5d6d2');
+  }
+  for (const [cx, cy] of [[0, B.d - 0.12], [B.w - 0.12, B.d - 0.12], [B.w - 0.12, 0]]) box(site, B.x + cx, B.y + cy, 2.17, 0.12, 0.12, 0.7, '#e38b2c', { flat: true });
+  for (const z of [0.75, 1.7]) { box(site, B.x - 0.05, B.y + B.d + 0.15, z, B.w + 0.1, 0.05, 0.05, '#8d949b', { flat: true }); box(site, B.x + B.w + 0.15, B.y - 0.05, z, 0.05, B.d + 0.1, 0.05, '#8d949b', { flat: true }); }
+  const sparks = el('g', {}, site);
+  // materials: stacked pallets + pipes
+  box(site, 8.7, 8.6, 0.08, 0.8, 0.6, 0.25, '#b0875a'); box(site, 8.75, 8.65, 0.33, 0.7, 0.5, 0.25, '#c49a6a');
+  for (let k = 0; k < 3; k++) box(site, 12.4, 8.6 + k * 0.16, 0.08, 0.7, 0.12, 0.12, '#8d949b', { flat: true });
+  // hoarding along the street sides, with a banner
+  for (let x = 8.45; x < 13.15; x += 0.6) box(site, x, 13.1, 0, 0.58, 0.05, 0.7, '#f0efe9', { flat: true });
+  for (let y = 8.45; y < 13.1; y += 0.6) box(site, 8.4, y, 0, 0.05, 0.58, 0.7, '#f0efe9', { flat: true });
+  box(site, 8.9, 13.16, 0.16, 3.4, 0.02, 0.38, '#141516', { flat: true });
+  wallText(site, 'L', 9.02, 13.18, 0.26, 'NEXT APP · COMING SOON', 8, '#ffb547', 800, 'start', 3.15);
+  // crane mast (lattice)
+  const M = { x: 12.55, y: 12.4, h: 5.0 };
+  shadow(Lshadow, M.x - 0.15, M.y - 0.15, 0.3, 0.3, M.h, 0.075, 0.1);
+  box(site, M.x - 0.3, M.y - 0.3, 0.08, 0.6, 0.6, 0.18, '#9aa1a9');
+  for (let z = 0.26; z < M.h; z += 0.5) {
+    box(site, M.x - 0.13, M.y - 0.13, z, 0.26, 0.26, 0.5, '#f2b23a', { flat: true });
+    const a = P(M.x - 0.13, M.y + 0.13, z), b = P(M.x + 0.13, M.y + 0.13, z + 0.5);
+    el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: '#c98b1c', 'stroke-width': 1 }, site);
+  }
+  const crane = el('g', {}, site), workers = [];
+
+  /* ======================= movers (people + cars) ======================= */
+  const dyn = { yBack: el('g', {}, LyBack), mid: el('g', {}, Lmid), yFront: el('g', {}, LyFront) };
+  const skin = ['#f0c9a0', '#d9a77a', '#a8754f', '#7d5537'];
+  function makePerson(color, hat) {
+    const g = el('g', {});
+    el('ellipse', { cx: 0, cy: 1.2, rx: 3.4, ry: 1.4, fill: 'rgba(40,48,60,.18)' }, g);
+    const l1 = el('line', { x1: -1, y1: -4, x2: -1, y2: 1, stroke: '#2b2e33', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g);
+    const l2 = el('line', { x1: 1, y1: -4, x2: 1, y2: 1, stroke: '#2b2e33', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, g);
+    el('rect', { x: -2.3, y: -10, width: 4.6, height: 6.6, rx: 2, fill: color }, g);
+    el('circle', { cx: 0, cy: -12.2, r: 2.4, fill: skin[Math.random() * skin.length | 0] }, g);
+    if (hat) el('path', { d: 'M-3 -12.6 Q0 -16.6 3 -12.6 Z', fill: '#ffd23f' }, g);
+    return { g, l1, l2, ph: Math.random() * 6 };
+  }
+  function pose(p, sx, sy, t, speed = 1) {
+    const sw = Math.sin(t * 10 * speed + p.ph) * 1.8;
+    p.l1.setAttribute('x2', -1 + sw); p.l2.setAttribute('x2', 1 - sw);
+    p.g.setAttribute('transform', `translate(${sx.toFixed(1)},${(sy - Math.abs(sw) * 0.25).toFixed(1)})`);
+  }
+  const shirts = ['#2f6fde', '#e8590c', '#20a35a', '#7c3aed', '#141516', '#d63a6a', '#2fb5c4', '#f2b23a', '#ffffff'];
+  /* ---- traffic rules ----
+     20 s cycle: x-road green 0-8 s (amber 8-9.5), all red to 10 s, y-road green 10-18 s (amber 18-19.5), all red to 20 s.
+     Pedestrians may start crossing a road only while that road's cars are held, and only with time to finish. */
+  const CYCLE = 20;
+  const signal = (m) => ({ xGreen: m < 8, yGreen: m >= 10 && m < 18, xAmber: m >= 8 && m < 9.5, yAmber: m >= 18 && m < 19.5 });
+  const pedMayStart = (axis, m) => (axis === 0 ? m > 0.8 && m < 2.6 : m > 10.8 && m < 12.6); // axis-0 walkers cross the y-road, axis-1 walkers cross the x-road
+  const ROAD = [6.2, 7.8], CAR_L = 0.95;
+
+  // pedestrians: each keeps to its own side of the sidewalk, so opposite directions pass cleanly
+  const peds = [];
+  [[0, 5.9, 3], [0, 8.1, 2], [1, 5.9, 3], [1, 8.1, 2]].forEach(([axis, band, n]) => {
+    for (let k = 0; k < n; k++) {
+      const dir = k % 2 ? -1 : 1;
+      let s0 = 1.0 + k * (11.6 / n) + Math.random() * 0.5; if (s0 > 5.3 && s0 < 8.7) s0 = s0 < 7 ? 4.9 : 9.1;
+      peds.push({ id: peds.length, axis, band, dir, s: Math.min(N - 0.6, s0), v: 0, vmax: 0.65 + Math.random() * 0.2, off: dir * 0.15, p: makePerson(shirts[peds.length % shirts.length]) });
+    }
+  });
+  const pedPos = (q) => (q.axis === 0 ? [q.s, q.band + q.off] : [q.band + q.off, q.s]);
+
+  // cars: one lane per direction on each road
+  const carColors = ['#d64545', '#f4f4f2', '#2f6fde', '#f2c230', '#2b2e33', '#3aa17a'];
+  const laneOf = (axis, dir) => (axis === 0 ? (dir > 0 ? 7.4 : 6.6) : (dir > 0 ? 6.6 : 7.4));
+  const cars = [[0, 1, 1.0], [0, 1, 10.5], [0, -1, 3.0], [0, -1, 12.2], [1, 1, 2.2], [1, -1, 11.0]].map(([axis, dir, s0], i) =>
+    ({ axis, dir, s: s0, v: 0, vmax: 1.35 + (i % 3) * 0.2, color: carColors[i], g: el('g', {}) }));
+  function drawCar(c, x, y) {
+    c.g.replaceChildren();
+    const along = c.axis === 0, L = CAR_L, Wd = 0.48, bx = along ? x - L / 2 : x - Wd / 2, by = along ? y - Wd / 2 : y - L / 2, w = along ? L : Wd, d = along ? Wd : L;
+    flatCircle(c.g, x + 0.2, y, 0.42, { fill: 'rgba(40,48,60,.22)' }, 0.006);
+    box(c.g, bx, by, 0.08, w, d, 0.24, c.color);
+    const cw = along ? w * 0.55 : w * 0.9, cd = along ? d * 0.9 : d * 0.55;
+    box(c.g, bx + (w - cw) / 2 + (along ? -0.05 * c.dir : 0), by + (d - cd) / 2 + (!along ? -0.05 * c.dir : 0), 0.32, cw, cd, 0.2, '#5b7190', { top: tint(c.color, 0.1) });
+    for (const [wx, wy] of along ? [[bx + 0.18, by + d], [bx + w - 0.18, by + d]] : [[bx + w, by + 0.18], [bx + w, by + d - 0.18]]) { const [px, py] = P(wx, wy, 0.08); el('ellipse', { cx: px, cy: py, rx: 2.6, ry: 2.6, fill: '#1d1e20' }, c.g); }
+    if (c.v < 0.15 && c.braking) { // brake lights while waiting
+      const [rx, ry] = along ? P(c.dir > 0 ? bx : bx + w, by + d, 0.22) : P(bx + w, c.dir > 0 ? by : by + d, 0.22);
+      el('circle', { cx: rx, cy: ry, r: 1.8, fill: '#ff3b2f' }, c.g);
+    }
+  }
+  const dynLayer = (x, y, axis) => (axis === 1 && y < 6.2 ? dyn.yBack : axis === 1 && y > 7.8 ? dyn.yFront : dyn.mid);
+
+  const lights = [];
+  function trafficLight(L, x, y, road) {
+    shadow(Lshadow, x - 0.04, y - 0.04, 0.08, 0.08, 1.6, 0, 0.12);
+    box(L, x - 0.04, y - 0.04, 0, 0.08, 0.08, 1.55, '#3a3d42', { flat: true });
+    box(L, x - 0.09, y - 0.02, 1.25, 0.18, 0.12, 0.62, '#1d1e20', { flat: true });
+    const lamps = ['#ff3b2f', '#ffb547', '#3ad07a'].map((c, k) => { const [lx, ly] = P(x, y + 0.11, 1.75 - k * 0.19); return el('circle', { cx: lx, cy: ly, r: 2.1, fill: '#2b2d30', 'data-on': c }, L); });
+    lights.push({ road, lamps });
+  }
+  trafficLight(Lhq, 5.4, 5.4, 'x'); trafficLight(Lfactory, 8.45, 5.4, 'y'); trafficLight(Lpark, 5.4, 8.48, 'y'); trafficLight(Llab, 8.5, 8.5, 'x');
+
+  /* ======================= pins + framing ======================= */
+  const PINS = {
+    hq:  { at: [3.25, 2.95, 5.0], label: 'Narne Labs HQ', st: 'The studio', c: '#141516', h: 'Narne Labs', p: 'The small studio where every app in this town gets made. Free, private apps that do one job well.', href: 'mailto:hello@narnelabs.com', cta: 'Say hello' },
+    cyv: { at: [10.8, 2.6, 3.5], label: 'CompressYourVideo', st: 'Live · Web and Android', c: '#20a35a', h: 'CompressYourVideo', p: 'Shrinks any video to fit WhatsApp, Discord, email and more. Compressed on your own device, never uploaded.', href: '/apps/compressyourvideo/', cta: 'Open' },
+    prd: { at: [3.0, 10.9, 2.3], label: 'Pradakshina', st: 'Coming soon · Android', c: '#e8590c', h: 'Pradakshina', p: 'Counts your rounds as you walk, with the phone in your pocket. Ten languages, no account needed.', href: '/apps/pradakshina/', cta: 'Open' },
+    lab: { at: [10.95, 10.5, 3.5], label: 'Next app', st: 'Under construction', c: '#a3a5a8', h: 'Next app', p: 'Something new is being built on this lot. Got an everyday problem you want solved? Tell us.', href: 'mailto:hello@narnelabs.com?subject=Next%20app', cta: 'Suggest an idea' },
+  };
+  function drawPins() {
+    Lpins.replaceChildren();
+    const zoom = FULL && vb ? vb[2] / FULL[2] : 1; // labels stay the same size on screen while zooming
+    const k = Math.max(1, Math.min(2.4, (FULL ? FULL[2] : 700) / Math.max(320, svg.clientWidth) * 1.05)) * zoom;
+    for (const id in PINS) {
+      const d = PINS[id], [px, py] = P(...d.at), fs = 11 * k, w = d.label.length * fs * 0.6 + 26 * k, h = 22 * k;
+      const g = el('g', { class: 'pin', tabindex: 0, role: 'button', 'aria-label': d.label, 'data-id': id }, Lpins);
+      el('rect', { x: px - w / 2, y: py - 8 * k - h, width: w, height: h, rx: h / 2, 'stroke-width': 1.2 * k }, g);
+      el('circle', { cx: px - w / 2 + 11 * k, cy: py - 8 * k - h / 2, r: 3.5 * k, fill: d.c }, g);
+      const t = el('text', { x: px - w / 2 + 19 * k, y: py - 8 * k - h / 2 + fs * 0.36, 'font-size': fs }, g); t.textContent = d.label;
+      el('line', { x1: px, y1: py - 8 * k, x2: px, y2: py, stroke: '#141516', 'stroke-width': 1.2 * k }, g);
+    }
+  }
+
+  let FULL = null, vb = null;
+  const bb = svg.getBBox();
+  FULL = [bb.x - 10, bb.y - 60, bb.width + 20, bb.height + 70];
+  vb = [...FULL];
+  const setVB = () => svg.setAttribute('viewBox', vb.map((v) => v.toFixed(1)).join(' '));
+  setVB(); drawPins();
+  addEventListener('resize', drawPins);
+
+  /* ======================= zoom into a building ======================= */
+  const panel = document.getElementById('panel');
+  let tween = null;
+  function zoomTo(target) {
+    const from = [...vb], t0 = performance.now(), dur = 950;
+    tween = (now) => { const k = Math.min(1, (now - t0) / dur), e = k < 0.5 ? 4 * k ** 3 : 1 - (-2 * k + 2) ** 3 / 2; vb = from.map((v, i) => v + (target[i] - v) * e); setVB(); drawPins(); if (k >= 1) tween = null; };
+  }
+  function visit(id) {
+    const d = PINS[id];
+    const [cx, cy] = P(d.at[0], d.at[1], d.at[2] * 0.4), w = FULL[2] * 0.5, h = w * (FULL[3] / FULL[2]);
+    zoomTo([cx - w * (innerWidth > 700 ? 0.36 : 0.5), cy - h * 0.5, w, h]);
+    document.querySelector('#pst span').textContent = d.st; panel.style.setProperty('--c', d.c);
+    document.getElementById('ph').textContent = d.h; document.getElementById('pp').textContent = d.p;
+    const a = document.getElementById('pa'); a.href = d.href; a.textContent = d.cta;
+    panel.classList.add('on');
+  }
+  function home() { zoomTo(FULL); panel.classList.remove('on'); }
+  svg.addEventListener('click', (e) => { const t = e.target.closest('[data-id]'); if (t) visit(t.dataset.id); });
+  svg.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { const t = e.target.closest('[data-id]'); if (t) { e.preventDefault(); visit(t.dataset.id); } } if (e.key === 'Escape') home(); });
+  document.getElementById('back').addEventListener('click', home);
+
+  /* ======================= animation ======================= */
+  for (let i = 0; i < 3; i++) { const p = makePerson(['#e8590c', '#2f6fde', '#20a35a'][i]); park.append(p.g); joggers.push(p); }
+  park.append(parkFront);
+  for (let i = 0; i < 2; i++) { const p = makePerson('#f28a1a', true); site.append(p.g); workers.push(p); }
+  const clouds = [{ x: -2, y: 2, r: 2.2, v: 0.32 }, { x: 4, y: 9, r: 1.7, v: 0.26 }, { x: 10, y: -2, r: 2.6, v: 0.22 }];
+  el('clipPath', { id: 'slab' }, defs).innerHTML = `<polygon points="${fmt([[0, 0, 0], [N, 0, 0], [N, N, 0], [0, N, 0]])}"/>`;
+  Lclouds.setAttribute('clip-path', 'url(#slab)');
+  const puffs = Array.from({ length: 7 }, (_, i) => ({ age: i / 7 }));
+  let laps = 1, lastA = 0, last = performance.now(), simT = 0;
+
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000), t = now / 1000; last = now;
+    if (tween) tween(now);
+
+    // drifting cloud shadows
+    Lclouds.replaceChildren();
+    for (const c of clouds) { c.x += c.v * dt; c.y += c.v * 0.35 * dt; if (c.x > N + 3) { c.x = -3; c.y = Math.random() * N * 0.8; } flatCircle(Lclouds, c.x, c.y, c.r, { fill: 'rgba(60,70,90,.07)' }, 0.09); flatCircle(Lclouds, c.x + c.r * 0.8, c.y - c.r * 0.3, c.r * 0.7, { fill: 'rgba(60,70,90,.07)' }, 0.09); }
+
+    // chimney steam
+    steam.replaceChildren();
+    for (const p of puffs) { p.age += dt * 0.22; if (p.age > 1) p.age -= 1; const [x, y] = P(12.41 + p.age * 1.2, 1.26 - p.age * 0.3, 4.6 + p.age * 2.2); el('circle', { cx: x, cy: y, r: 4 + p.age * 12, fill: `rgba(255,255,255,${(0.75 * (1 - p.age)).toFixed(2)})` }, steam); }
+
+    // conveyor belt slats moving + the press stamping parcels
+    belt.replaceChildren();
+    for (let k = 0; k < 16; k++) { const x = CV.x + ((k * 0.32 + t * 0.55) % CV.w); poly(belt, [[x, CV.y + 0.05, 0.321], [x + 0.06, CV.y + 0.05, 0.321], [x + 0.06, CV.y + CV.d - 0.05, 0.321], [x, CV.y + CV.d - 0.05, 0.321]], '#474b52'); }
+    pressMove.replaceChildren();
+    const cyc = (t % 4) / 4; let bx, size, ramZ;
+    if (cyc < 0.32) { bx = CV.x + 0.2 + (cyc / 0.32) * (PR.x + 0.58 - CV.x - 0.2); size = 1; ramZ = 2.25; }
+    else if (cyc < 0.56) { const k = (cyc - 0.32) / 0.24, slam = Math.min(1, k / 0.35); bx = PR.x + 0.58; ramZ = 2.25 - slam * (2.25 - 0.98); size = k < 0.35 ? 1 : 0.42; }
+    else { const k = (cyc - 0.56) / 0.44; bx = PR.x + 0.58 + k * (CV.x + CV.w - PR.x - 0.7); size = 0.42; ramZ = 0.98 + Math.min(1, k * 2.5) * 1.27; }
+    const s = 0.62 * size;
+    if (bx < CV.x + CV.w - 0.15) { box(pressMove, bx - s / 2, CV.y + CV.d / 2 - s / 2, 0.32, s, s, s * 0.9, '#c9a26f'); box(pressMove, bx - 0.04, CV.y + CV.d / 2 - s / 2, 0.32 + s * 0.9, 0.08, s, 0.005, '#e7d3a8', { flat: true }); }
+    box(pressMove, PR.x + 0.5, PR.y + 0.32, ramZ + 0.3, 0.2, 0.2, Math.max(0.01, 2.82 - ramZ - 0.3), '#c9ced4', { left: 'url(#chrome)' });
+    box(pressMove, PR.x + 0.12, PR.y + 0.0, ramZ, 0.95, 0.85, 0.3, '#6a2fd6');
+
+    // fountain jet + ripples
+    ripples.replaceChildren(); jet.replaceChildren();
+    for (let k = 0; k < 3; k++) { const a = ((t * 0.6 + k / 3) % 1); flatCircle(ripples, PK.cx, PK.cy, 0.12 + a * 0.45, { fill: 'none', stroke: `rgba(255,255,255,${(0.7 * (1 - a)).toFixed(2)})`, 'stroke-width': 1 }, 0.205); }
+    const [jx, jy] = P(PK.cx, PK.cy, 0.2), jh = 18 + Math.sin(t * 6) * 2;
+    el('path', { d: `M${jx - 1.5},${jy} Q${jx},${jy - jh * 1.6} ${jx + 1.5},${jy}`, fill: 'rgba(214,236,250,.85)' }, jet);
+    for (let k = 0; k < 6; k++) { const a = ((t * 1.4 + k / 6) % 1), dx = (k % 2 ? 1 : -1) * a * 9; el('circle', { cx: jx + dx, cy: jy - jh * (1 - (a * 2 - 1) ** 2) * 0.9, r: 1.2, fill: 'rgba(214,236,250,.9)' }, jet); }
+
+    // joggers lapping the park path, the board counts laps
+    joggers.forEach((p, i) => {
+      const a = t * 0.42 + i * 2.1, [sx, sy] = P(PK.cx + Math.cos(a) * 1.8, PK.cy + Math.sin(a) * 1.8, 0.08); pose(p, sx, sy, t, 1.2);
+      if (i === 0) { const m = a % (Math.PI * 2); if (m < lastA) { laps = laps % 21 + 1; lapText.textContent = 'LAP ' + String(laps).padStart(2, '0'); } lastA = m; }
+    });
+
+    // crane: jib slews, trolley runs, a beam goes up and down
+    crane.replaceChildren();
+    const th = Math.PI * 1.25 + Math.sin(t * 0.3) * 0.45, top = M.h + 0.26;
+    const jx2 = M.x + Math.cos(th) * 3.3, jy2 = M.y + Math.sin(th) * 3.3, cx2 = M.x - Math.cos(th) * 1.1, cy2 = M.y - Math.sin(th) * 1.1;
+    const tr = 0.45 + (Math.sin(t * 0.5) * 0.5 + 0.5) * 0.45, trx = M.x + Math.cos(th) * 3.3 * tr, try_ = M.y + Math.sin(th) * 3.3 * tr;
+    const A = P(M.x, M.y, top + 0.9), Bj = P(jx2, jy2, top), Cc = P(cx2, cy2, top);
+    el('line', { x1: Cc[0], y1: Cc[1], x2: Bj[0], y2: Bj[1], stroke: '#f2b23a', 'stroke-width': 5, 'stroke-linecap': 'square' }, crane);
+    el('line', { x1: Cc[0], y1: Cc[1] + 2, x2: Bj[0], y2: Bj[1] + 2, stroke: '#c98b1c', 'stroke-width': 1 }, crane);
+    el('line', { x1: A[0], y1: A[1], x2: Bj[0], y2: Bj[1], stroke: '#8d949b', 'stroke-width': 1 }, crane);
+    el('line', { x1: A[0], y1: A[1], x2: Cc[0], y2: Cc[1], stroke: '#8d949b', 'stroke-width': 1 }, crane);
+    box(crane, M.x - 0.2, M.y - 0.2, top - 0.1, 0.4, 0.4, 0.45, '#f2f1ee'); // cab
+    box(crane, cx2 - 0.28, cy2 - 0.28, top - 0.55, 0.56, 0.56, 0.5, '#8d949b');
+    const hookZ = 2.6 + (Math.sin(t * 0.5 + 1.2) * 0.5 + 0.5) * 1.6, T = P(trx, try_, top), Hh = P(trx, try_, hookZ + 0.18);
+    el('line', { x1: T[0], y1: T[1], x2: Hh[0], y2: Hh[1], stroke: '#1d1e20', 'stroke-width': 0.9 }, crane);
+    box(crane, trx - 0.7, try_ - 0.08, hookZ, 1.4, 0.16, 0.16, '#d4483b');
+    // welding sparks on the top floor
+    sparks.replaceChildren();
+    if (Math.sin(t * 2.3) > 0.2) for (let k = 0; k < 7; k++) { const [x, y] = P(B.x + 1.9, B.y + B.d - 0.1, 2.3); el('circle', { cx: x + (Math.random() - 0.5) * 12, cy: y - Math.random() * 9, r: Math.random() * 1.3 + 0.4, fill: Math.random() < 0.5 ? '#ffd23f' : '#ffffff' }, sparks); }
+    workers.forEach((p, i) => { const a = t * 0.25 + i * Math.PI, x = 9.2 + (Math.sin(a) * 0.5 + 0.5) * 3.4, y = 12.7 - i * 0.55; const [sx, sy] = P(x, y, 0.08); pose(p, sx, sy, t, 0.8); });
+
+    // ---- signals ----
+    simT += dt; const m = simT % CYCLE, sig = signal(m);
+    for (const L of lights) {
+      const g = L.road === 'x' ? sig.xGreen : sig.yGreen, a = L.road === 'x' ? sig.xAmber : sig.yAmber;
+      L.lamps.forEach((c, k) => c.setAttribute('fill', (k === 0 && !g && !a) || (k === 1 && a) || (k === 2 && g) ? c.dataset.on : '#2b2d30'));
+    }
+
+    // ---- pedestrians ----
+    // A crossing runs from the kerb-side wait spot (clear of the other walkway) to the far corner.
+    // People mid-crossing have right of way; everyone else gives way to them.
+    for (const p of peds) {
+      const dirV = p.axis === 0 ? [p.dir, 0] : [0, p.dir], [px0, py0] = pedPos(p);
+      const waitAt = p.dir > 0 ? ROAD[0] - 0.68 : ROAD[1] + 0.68;          // just before the corner square
+      const farEnd = p.dir > 0 ? ROAD[1] + 0.68 : ROAD[0] - 0.68;          // just past the far corner square
+      const along = (p.s - waitAt) * p.dir, span = (farEnd - waitAt) * p.dir;
+      if (p.crossing && (along > span || along < -0.2)) p.crossing = false;
+      let want = p.vmax;
+      if (!p.crossing) {
+        const toWait = -along;                                               // distance left to the wait spot
+        if (toWait >= 0 && toWait < 0.7) {
+          if (pedMayStart(p.axis, m) && toWait < 0.08) p.crossing = true;     // our turn: go
+          else if (!pedMayStart(p.axis, m)) want = Math.min(want, Math.max(0, toWait - 0.02) * 2.5);
+        }
+      }
+      for (const q of peds) {
+        if (q === p) continue;
+        if (q.axis === p.axis && q.band === p.band && q.dir !== p.dir) continue; // passing on the other side
+        const [qx, qy] = pedPos(q), dx = qx - px0, dy = qy - py0, dist = Math.hypot(dx, dy), ahead = dx * dirV[0] + dy * dirV[1];
+        if (dist > 0.5 || ahead <= 0.05) continue;
+        if (q.axis === p.axis && q.dir === p.dir) { want = Math.min(want, dist < 0.34 ? 0 : q.v * 0.95); continue; } // follow
+        if (p.crossing) continue;                                              // crossers don't stop for side traffic
+        if (q.crossing) { want = 0; continue; }                                // give way to someone crossing
+        const qDir = q.axis === 0 ? [q.dir, 0] : [0, q.dir], meAhead = -dx * qDir[0] - dy * qDir[1];
+        if (meAhead <= 0.05 || q.id < p.id) want = 0;                           // corner etiquette
+      }
+      p.v += Math.max(-3 * dt, Math.min(2 * dt, want - p.v));
+      p.s += p.v * p.dir * dt;
+      if (!p.crossing && ((p.dir < 0 && p.s < 0.5) || (p.dir > 0 && p.s > N - 0.5))) {      // turn round at the edge,
+        const [ex, ey] = pedPos(p);                                                              // once the other side is clear
+        const clear = peds.every((q) => q === p || Math.hypot(pedPos(q)[0] - ex, pedPos(q)[1] - ey) > 0.6 || (q.turnWait && q.id > p.id));
+        if (clear) { p.dir *= -1; p.turnWait = false; } else { p.v = 0; p.turnWait = true; p.s = Math.max(0.45, Math.min(N - 0.45, p.s)); }
+      }
+      p.off += (p.dir * 0.15 - p.off) * Math.min(1, dt * 3);
+      const [x, y] = pedPos(p), [sx, sy] = P(x, y, 0.07);
+      p.p.cyc = (p.p.cyc || 0) + dt * p.v * 15;
+      const sw = Math.sin(p.p.cyc) * 1.8 * Math.min(1, p.v / 0.3);
+      p.p.l1.setAttribute('x2', -1 + sw); p.p.l2.setAttribute('x2', 1 - sw);
+      p.p.g.setAttribute('transform', `translate(${sx.toFixed(1)},${(sy - Math.abs(sw) * 0.25).toFixed(1)})`);
+      p.p.g._d = x + y; const L = dynLayer(x, y, p.axis); if (p.p.g.parentNode !== L) L.append(p.p.g);
+    }
+
+    // ---- cars ----
+    for (const c of cars) {
+      const green = c.axis === 0 ? sig.xGreen : sig.yGreen;
+      const front = c.s + c.dir * CAR_L / 2, stopAt = c.dir > 0 ? 5.42 : 8.58, toStop = (stopAt - front) * c.dir;
+      let want = c.vmax; c.braking = false;
+      if (!green && toStop >= -0.02) { want = Math.min(want, Math.max(0, toStop - 0.02) * 1.6); c.braking = true; }       // red: stop at the line
+      let gap = Infinity, lead = null;
+      for (const q of cars) if (q !== c && q.axis === c.axis && q.dir === c.dir) { const g = (q.s - c.s) * c.dir; if (g > 0 && g < gap) { gap = g; lead = q; } }
+      if (lead) { const room = gap - CAR_L - 0.35; want = Math.min(want, Math.max(0, room) * 1.8, lead.v + room * 1.2); if (room < 0.6) c.braking = true; } // keep a safe gap
+      c.v += Math.max(-4 * dt, Math.min(1.3 * dt, want - c.v)); c.v = Math.max(0, c.v);
+      c.s += c.v * c.dir * dt;
+      // leave the town, then come back in only when the lane entrance is clear
+      if ((c.dir > 0 && c.s > N + 0.7) || (c.dir < 0 && c.s < -0.7)) {
+        const entryS = c.dir > 0 ? -0.7 : N + 0.7;
+        const busy = cars.some((q) => q !== c && q.axis === c.axis && q.dir === c.dir && Math.abs(q.s - entryS) < 1.7);
+        if (!busy) { c.s = entryS; c.v = c.vmax * 0.8; } else { c.s = c.dir > 0 ? N + 0.7 : -0.7; c.v = 0; }
+      }
+      const lane = laneOf(c.axis, c.dir), [x, y] = c.axis === 0 ? [c.s, lane] : [lane, c.s];
+      drawCar(c, x, y);
+      const edge = Math.min(c.s + 0.7, N + 0.7 - c.s); c.g.setAttribute('opacity', Math.max(0, Math.min(1, edge / 0.9)).toFixed(2));
+      c.g._d = x + y + 0.3; const L = dynLayer(x, y, c.axis); if (c.g.parentNode !== L) L.append(c.g);
+    }
+
+    // ---- paint in depth order within each layer (things further back first) ----
+    for (const L of Object.values(dyn)) {
+      const kids = [...L.children], sorted = kids.slice().sort((a, b) => a._d - b._d);
+      if (sorted.some((k, i) => k !== kids[i])) sorted.forEach((k) => L.append(k));
+    }
+    requestAnimationFrame(frame);
+  }
+  // test hook: positions of everything that moves
+  window.__town = () => ({ t: simT, peds: peds.map((p) => pedPos(p)), cars: cars.map((c) => { const lane = laneOf(c.axis, c.dir); return { axis: c.axis, x: c.axis === 0 ? c.s : lane, y: c.axis === 0 ? lane : c.s, s: c.s }; }) });
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

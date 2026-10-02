@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Narne Labs · Mock C: split-flap board</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wall: #e6e7e9; --ink: #141516; --muted: #5f6266;
+    --board: #121314; --cell: #1d1e20; --cell-hi: #26282a; --char: #f3f1ea; --amber: #ffb51f; --green: #39d98a;
+    --cw: clamp(13px, 1.5vw, 22px); /* flap cell width */
+    --ui: "Barlow", system-ui, sans-serif; --flap: "Barlow Condensed", "Arial Narrow", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--wall); color: var(--ink); font: 18px/1.55 var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+
+  header { max-width: 1240px; margin: 0 auto; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; text-decoration: none; }
+  .brand img { height: 34px; width: auto; }
+  header nav { display: flex; gap: 26px; font-size: 16px; font-weight: 500; }
+  header nav a { text-decoration: none; color: var(--muted); } header nav a:hover { color: var(--ink); }
+  @media (max-width: 600px) { header nav a:not(:last-child) { display: none; } }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 40px 28px 90px; }
+  .hero h1 { margin: 0; font-weight: 700; font-size: clamp(34px, 4.6vw, 60px); line-height: 1.05; letter-spacing: -.015em; max-width: 16ch; }
+  .hero > p { margin: 14px 0 0; color: var(--muted); font-size: 20px; max-width: 46ch; }
+
+  /* ---------- the board ---------- */
+  .mount { position: relative; margin-top: 64px; }
+  .mount::before, .mount::after { /* hanging rods */
+    content: ""; position: absolute; top: -64px; width: 6px; height: 64px; background: linear-gradient(90deg, #9a9ca0, #cfd1d4, #8d8f93); border-radius: 3px;
+  }
+  .mount::before { left: 18%; } .mount::after { right: 18%; }
+  .board {
+    position: relative; background: var(--board); border-radius: 16px; padding: clamp(14px, 2.4vw, 30px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 -2px 0 rgba(0,0,0,.6), 0 2px 0 #2b2c2e, 0 40px 80px -30px rgba(0,0,0,.55), 0 18px 30px -18px rgba(0,0,0,.4);
+  }
+  .board::before { /* top bezel label strip */
+    content: "NARNE LABS  ·  APPS"; display: block; font: 600 12px/1 var(--flap); letter-spacing: .32em; color: #8b8d90; margin-bottom: 18px;
+  }
+  .colhead, .row { display: grid; grid-template-columns: calc(var(--cw) * 20.5) calc(var(--cw) * 15) 1fr; align-items: center; gap: calc(var(--cw) * .9); }
+  .colhead { font: 600 11px/1 var(--flap); letter-spacing: .26em; color: #77797c; padding: 0 2px 10px; }
+  .row { padding: 10px 2px; border-top: 1px solid #222326; text-decoration: none; border-radius: 6px; transition: background .25s; }
+  a.row:hover { background: #18191b; }
+  a.row:hover .go { opacity: 1; transform: translateX(0); }
+  .field { display: flex; gap: calc(var(--cw) * .12); }
+  .status { display: flex; align-items: center; gap: 12px; }
+  .lamp { flex: none; width: 11px; height: 11px; border-radius: 50%; background: #3a3b3e; box-shadow: inset 0 1px 2px rgba(0,0,0,.6); }
+  .lamp.live { background: var(--green); box-shadow: 0 0 10px var(--green), 0 0 2px #fff inset; }
+  .lamp.soon { background: var(--amber); box-shadow: 0 0 10px var(--amber); animation: blink 1.4s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: .25; box-shadow: none; } }
+  .go { margin-left: auto; color: var(--char); font: 600 calc(var(--cw) * .8)/1 var(--flap); opacity: 0; transform: translateX(-6px); transition: opacity .25s, transform .25s; }
+  .ticker { margin-top: 18px; padding-top: 16px; border-top: 1px solid #2a2b2e; display: flex; align-items: center; gap: 14px; }
+  .ticker .label { font: 600 11px/1 var(--flap); letter-spacing: .26em; color: #77797c; }
+
+  /* one split-flap cell */
+  .cell { position: relative; width: var(--cw); height: calc(var(--cw) * 1.5); perspective: calc(var(--cw) * 14); font: 600 calc(var(--cw) * 1.12)/calc(var(--cw) * 1.5) var(--flap); color: var(--char); text-align: center; }
+  .cell.amber { color: var(--amber); }
+  .half, .flap { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; background: var(--cell); }
+  .half.t, .flap.t { top: 0; border-radius: 3px 3px 0 0; background: linear-gradient(var(--cell-hi), var(--cell)); }
+  .half.b, .flap.b { bottom: 0; border-radius: 0 0 3px 3px; }
+  .half span, .flap span { position: absolute; left: 0; right: 0; height: 200%; }
+  .half.b span, .flap.b span { top: -100%; }
+  .flap.t { transform-origin: 50% 100%; backface-visibility: hidden; z-index: 2; }
+  .flap.b { transform-origin: 50% 0; backface-visibility: hidden; z-index: 2; }
+  .cell::after { content: ""; position: absolute; left: 0; right: 0; top: calc(50% - .5px); height: 1px; background: #050505; z-index: 3; }
+  .cell::before { /* tiny hinge pins */ content: ""; position: absolute; top: calc(50% - 2px); left: -1px; right: -1px; height: 4px; background: radial-gradient(circle at 1px 2px, #3b3c3f 1px, transparent 1.5px) left / 50% 100% no-repeat, radial-gradient(circle at calc(100% - 1px) 2px, #3b3c3f 1px, transparent 1.5px) right / 50% 100% no-repeat; z-index: 4; }
+
+  .stamp { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 18px; color: var(--muted); font-size: 15px; }
+
+  /* phones: stack the board into two lines per app */
+  @media (max-width: 760px) {
+    :root { --cw: calc((100vw - 92px) / 19.6); }
+    .colhead { display: none; }
+    .row { grid-template-columns: 1fr; gap: 8px; padding: 14px 2px; }
+    .row .platform { order: 2; }
+    .row .status { order: 3; }
+    .go { display: none; }
+    .ticker .label { display: none; }
+    .ticker { margin-top: 14px; }
+    .mount::before { left: 12%; } .mount::after { right: 12%; }
+  }
+
+  /* below */
+  .below { max-width: 1240px; margin: 0 auto; padding: 20px 28px 90px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; border-top: 1px solid #cfd0d3; }
+  .below h2 { margin: 26px 0 8px; font-size: 22px; }
+  .below p { margin: 0; color: var(--muted); font-size: 17px; }
+  @media (max-width: 760px) { .below { grid-template-columns: 1fr; gap: 0; } }
+  footer { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 15px; border-top: 1px solid #cfd0d3; }
+  footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#"><img src="/assets/img/kalki.svg" alt="">Narne Labs</a>
+  <nav><a href="#apps">Apps</a><a href="#about">About</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
+</header>
+
+<section class="hero" id="apps">
+  <h1>Small apps for everyday problems.</h1>
+  <p>Narne Labs builds free, private apps that do one job well. Here's what's out, and what's coming next.</p>
+
+  <div class="mount">
+    <div class="board" aria-label="Narne Labs apps">
+      <div class="colhead"><span>APP</span><span>PLATFORM</span><span>STATUS</span></div>
+
+      <a class="row" href="/apps/compressyourvideo/" aria-label="CompressYourVideo, web and Android, live">
+        <div class="field name" data-text="COMPRESSYOURVIDEO" data-len="18"></div>
+        <div class="field platform" data-text="WEB + ANDROID" data-len="13"></div>
+        <div class="status"><i class="lamp live"></i><div class="field" data-text="LIVE" data-len="11" data-amber></div><span class="go">→</span></div>
+      </a>
+
+      <a class="row" href="/apps/pradakshina/" aria-label="Pradakshina, Android, coming soon">
+        <div class="field name" data-text="PRADAKSHINA" data-len="18"></div>
+        <div class="field platform" data-text="ANDROID" data-len="13"></div>
+        <div class="status"><i class="lamp soon"></i><div class="field" data-text="COMING SOON" data-len="11" data-amber></div><span class="go">→</span></div>
+      </a>
+
+      <div class="row" aria-label="Next app, in the lab">
+        <div class="field name" data-text="NEXT APP" data-len="18"></div>
+        <div class="field platform" data-text="TBA" data-len="13"></div>
+        <div class="status"><i class="lamp"></i><div class="field" data-text="IN THE LAB" data-len="11" data-amber></div></div>
+      </div>
+
+      <div class="ticker">
+        <span class="label">SO FAR</span>
+        <div class="field" id="ticker" data-len="24"></div>
+      </div>
+    </div>
+  </div>
+  <div class="stamp"><span>Numbers as of October 2026.</span><span>Click a row to open the app.</span></div>
+</section>
+
+<section class="below" id="about">
+  <div><h2>Private by default</h2><p>If an app can do its job on your device, it does. CompressYourVideo never uploads your video.</p></div>
+  <div><h2>No ads, no paywalls</h2><p>Our apps are free to use, without banners or locked features.</p></div>
+  <div><h2>One job, done well</h2><p>Each app solves one problem, opens fast and works on any phone.</p></div>
+</section>
+
+<footer>
+  <span>© 2026 Narne Labs · <a href="mailto:hello@narnelabs.com">hello@narnelabs.com</a></span>
+  <nav><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+</footer>
+
+<script>
+(() => {
+  const CHARS = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-.,·:/?!';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const STEP = 55; // ms per half-flip
+
+  function makeCell(amber) {
+    const c = document.createElement('div');
+    c.className = 'cell' + (amber ? ' amber' : '');
+    c.innerHTML = '<div class="half t"><span></span></div><div class="half b"><span></span></div>';
+    c._ch = ' ';
+    c.setAttribute('aria-hidden', 'true');
+    return c;
+  }
+  function paint(c, ch) { c.querySelectorAll('.half span').forEach((s) => (s.textContent = ch)); c._ch = ch; }
+
+  // one physical flip: old top half falls, new bottom half lands
+  function flipOnce(c, next) {
+    return new Promise((done) => {
+      const old = c._ch;
+      const ft = document.createElement('div'); ft.className = 'flap t'; ft.innerHTML = `<span>${old}</span>`;
+      const fb = document.createElement('div'); fb.className = 'flap b'; fb.innerHTML = `<span>${next}</span>`;
+      fb.style.transform = 'rotateX(90deg)';
+      c.querySelector('.half.t span').textContent = next;      // revealed behind the falling flap
+      c.append(ft, fb);
+      ft.animate([{ transform: 'rotateX(0)' }, { transform: 'rotateX(-90deg)' }], { duration: STEP, easing: 'ease-in', fill: 'forwards' }).onfinish = () => {
+        fb.animate([{ transform: 'rotateX(90deg)' }, { transform: 'rotateX(0)' }], { duration: STEP, easing: 'ease-out', fill: 'forwards' }).onfinish = () => {
+          c.querySelector('.half.b span').textContent = next; c._ch = next; ft.remove(); fb.remove(); done();
+        };
+      };
+    });
+  }
+
+  // like a real Solari board: roll forward through the drum until the target letter
+  async function flipTo(c, target, delay) {
+    if (reduce) { paint(c, target); return; }
+    await new Promise((r) => setTimeout(r, delay));
+    let i = CHARS.indexOf(c._ch); const end = CHARS.indexOf(target) < 0 ? 0 : CHARS.indexOf(target);
+    let guard = 0;
+    while (i !== end && guard++ < 60) {
+      // skip ahead a little so long rolls don't take forever, but always show some motion
+      const dist = (end - i + CHARS.length) % CHARS.length;
+      i = (i + (dist > 8 ? Math.ceil(dist / 6) : 1)) % CHARS.length;
+      await flipOnce(c, CHARS[i]);
+    }
+  }
+
+  function build(field) {
+    const len = +field.dataset.len, amber = field.hasAttribute('data-amber');
+    field._cells = Array.from({ length: len }, () => { const c = makeCell(amber); paint(c, ' '); field.append(c); return c; });
+  }
+  function show(field, text, base = 0) {
+    const t = text.toUpperCase().padEnd(field._cells.length, ' ').slice(0, field._cells.length);
+    return Promise.all(field._cells.map((c, k) => flipTo(c, t[k], base + k * 28 + Math.random() * 60)));
+  }
+
+  const fields = [...document.querySelectorAll('.field[data-len]')];
+  fields.forEach(build);
+  // on phones each row stacks, so trim the empty cells to keep lines short
+  if (matchMedia('(max-width: 760px)').matches) {
+    fields.forEach((f) => { if (f.dataset.text) { const keep = Math.max(f.dataset.text.length, 4); f._cells.slice(keep).forEach((c) => c.remove()); f._cells = f._cells.slice(0, keep); } });
+  }
+  fields.filter((f) => f.dataset.text).forEach((f, idx) => show(f, f.dataset.text, 300 + idx * 120));
+
+  const ticker = document.getElementById('ticker');
+  if (matchMedia('(max-width: 760px)').matches) { ticker._cells.slice(18).forEach((c) => c.remove()); ticker._cells = ticker._cells.slice(0, 18); }
+  const lines = ['2,600+ INSTALLS', '9,800+ VIDEOS COMPRESSED', '1.5 TB SAVED FOR USERS', 'NO ADS · NO PAYWALLS'];
+  const short = ['2,600+ INSTALLS', '9,800+ VIDEOS', '1.5 TB SAVED', 'NO ADS OR PAYWALLS'];
+  const msgs = ticker._cells.length < 24 ? short : lines;
+  let n = 0;
+  const cycle = () => show(ticker, msgs[n++ % msgs.length]).then(() => setTimeout(cycle, 3800));
+  setTimeout(cycle, 1400);
+})();
+</script>
+</body>
+</html>

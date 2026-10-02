@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Narne Labs · Mock D: the knot</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --wall: #e6e7e9; --ink: #141516; --muted: #5f6266; --ui: "Barlow", system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--wall); color: var(--ink); font: 18px/1.55 var(--ui); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; }
+  header { max-width: 1240px; margin: 0 auto; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; text-decoration: none; }
+  .brand img { height: 34px; width: auto; }
+  header nav { display: flex; gap: 26px; font-size: 16px; font-weight: 500; }
+  header nav a { text-decoration: none; color: var(--muted); } header nav a:hover { color: var(--ink); }
+  @media (max-width: 600px) { header nav a:not(:last-child) { display: none; } }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 28px 28px 40px; }
+  .hero h1 { margin: 0; font-weight: 700; font-size: clamp(34px, 4.6vw, 60px); line-height: 1.05; letter-spacing: -.015em; max-width: 16ch; }
+  .hero > p { margin: 14px 0 0; color: var(--muted); font-size: 20px; max-width: 46ch; }
+
+  /* the playground */
+  .yard { position: relative; margin-top: 18px; height: clamp(440px, 58vh, 600px); touch-action: none; user-select: none; -webkit-user-select: none; }
+  .yard canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+  .yard canvas.grabbing { cursor: grabbing; }
+  .caption { position: relative; margin-top: 4px; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 16px; color: var(--muted); pointer-events: none; }
+  .caption b { color: var(--ink); font-weight: 600; }
+  .again { pointer-events: auto; border: 1.5px solid var(--ink); background: transparent; border-radius: 999px; padding: 8px 16px; font: 600 15px var(--ui); color: var(--ink); cursor: pointer; opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .4s; }
+  .again.on { opacity: 1; transform: none; }
+  .again:hover { background: var(--ink); color: #fff; }
+
+  /* app tags that hang on the line */
+  .tag { position: absolute; left: 0; top: 0; width: var(--tw, 210px); transform-origin: 50% 0; pointer-events: none; opacity: 0; }
+  .tag.on { pointer-events: auto; }
+  .tag .pin { position: absolute; left: 50%; top: -9px; width: 12px; height: 26px; margin-left: -6px; border-radius: 3px; background: #2a2b2d; box-shadow: inset 0 0 0 2px #3c3d40; z-index: 2; }
+  .tag a { display: block; margin-top: 10px; padding: 16px 16px 14px; background: #fff; border-radius: 10px; text-decoration: none; box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 18px 30px -18px rgba(0,0,0,.45); transition: box-shadow .2s; }
+  .tag a:hover { box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 24px 40px -18px rgba(0,0,0,.55); }
+  .tag img { width: 40px; height: 40px; border-radius: 10px; }
+  .tag .blank { width: 40px; height: 40px; border-radius: 10px; border: 2px dashed #b8babd; display: grid; place-items: center; color: #9a9ca0; font-weight: 700; }
+  .tag h3 { margin: 10px 0 2px; font-size: 19px; line-height: 1.15; }
+  .tag p { margin: 0; font-size: 14px; line-height: 1.35; color: var(--muted); }
+  .tag .st { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .tag .st i { width: 7px; height: 7px; border-radius: 50%; background: #20a35a; }
+  .tag .st.soon i { background: #e8590c; } .tag .st.lab i { background: #a3a5a8; }
+  @media (max-width: 700px) { .tag p { display: none; } .tag a { padding: 10px 10px 9px; } .tag img, .tag .blank { width: 30px; height: 30px; border-radius: 8px; } .tag h3 { font-size: 12.5px; } .tag a { padding: 9px 8px 8px; } .tag .st { font-size: 10px; margin-top: 6px; } }
+
+  /* no-JS / reduced-motion fallback */
+  .fallback { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .fallback a { display: block; padding: 18px; background: #fff; border-radius: 10px; text-decoration: none; }
+  .js .fallback { display: none; }
+
+  .numbers { max-width: 1240px; margin: 0 auto; padding: 36px 28px 30px; display: flex; flex-wrap: wrap; gap: 18px 48px; border-top: 1px solid #cfd0d3; }
+  .numbers div b { display: block; font-size: 34px; line-height: 1.1; }
+  .numbers div span { color: var(--muted); font-size: 15px; }
+  footer { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 15px; border-top: 1px solid #cfd0d3; }
+  footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#"><img src="/assets/img/kalki.svg" alt="">Narne Labs</a>
+  <nav><a href="#apps">Apps</a><a href="#numbers">Studio</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
+</header>
+
+<section class="hero" id="apps">
+  <h1>Small apps for everyday problems.</h1>
+  <p>Every app we make starts as a tangled, everyday problem. We untangle it.</p>
+
+  <div class="yard" id="yard">
+    <canvas id="rope" aria-label="A tangled rope. Drag its loose end onto the hook on the right to untangle it and reveal our apps."></canvas>
+
+    <div class="tag" data-at="0.2"><span class="pin"></span>
+      <a href="/apps/compressyourvideo/"><img src="/apps/compressyourvideo/img/icon-512.png" alt=""><h3>CompressYour<wbr>Video</h3><p>Shrinks videos to fit any app, on your device.</p><span class="st"><i></i>Live</span></a></div>
+    <div class="tag" data-at="0.5"><span class="pin"></span>
+      <a href="/apps/pradakshina/"><img src="/apps/pradakshina/img/icon-512.png" alt=""><h3>Pradakshina</h3><p>Counts your rounds as you walk.</p><span class="st soon"><i></i>Coming soon</span></a></div>
+    <div class="tag" data-at="0.8"><span class="pin"></span>
+      <a href="mailto:hello@narnelabs.com?subject=Next%20app"><span class="blank">?</span><h3>Next app</h3><p>Still a knot. Got a problem for us?</p><span class="st lab"><i></i>In the lab</span></a></div>
+
+  </div>
+  <div class="caption"><span id="hint"><b>Every app starts as a knot.</b> Drag the loose end onto the hook →</span><button class="again" id="again">Tangle it again</button></div>
+
+  <div class="fallback">
+    <a href="/apps/compressyourvideo/"><b>CompressYourVideo</b><br>Live · Web and Android</a>
+    <a href="/apps/pradakshina/"><b>Pradakshina</b><br>Coming soon · Android</a>
+    <a href="mailto:hello@narnelabs.com"><b>Next app</b><br>In the lab</a>
+  </div>
+</section>
+
+<section class="numbers" id="numbers">
+  <div><b>2</b><span>apps out, more on the way</span></div>
+  <div><b>1</b><span>still a knot, in the lab</span></div>
+  <div><b>0</b><span>ads or paywalls in any of our apps</span></div>
+  <div><b>Free</b><span>to use, every one of them</span></div>
+</section>
+
+<footer>
+  <span>© 2026 Narne Labs · <a href="mailto:hello@narnelabs.com">hello@narnelabs.com</a></span>
+  <nav><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+</footer>
+
+<script>
+(() => {
+  const yard = document.getElementById('yard');
+  const cvs = document.getElementById('rope');
+  const ctx = cvs.getContext('2d');
+  const hint = document.getElementById('hint');
+  const again = document.getElementById('again');
+  const tags = [...yard.querySelectorAll('.tag')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W = 0, H = 0, DPR = 1, N = 0;
+  let P = [];            // rope points: {x, y, px, py, rx, ry}  (rx/ry = rest position in the knot)
+  let L = 0, L0 = 0, Lt = 0; // segment length: current, knotted, taut target
+  let pegL, pegR;
+  let hold = 1;          // how strongly points are held in the knot shape (1 = floating knot, 0 = free rope)
+  let gravity = 0;
+  let grabbed = -1, pointer = { x: 0, y: 0 };
+  let hooked = false, solved = false, touched = false, t = 0;
+  const cards = tags.map((el) => ({ el, at: +el.dataset.at, a: 0, w: 0, vx: 0 }));
+
+  function layout() {
+    const r = yard.getBoundingClientRect();
+    W = r.width; H = r.height; DPR = Math.min(devicePixelRatio || 1, 2);
+    cvs.width = W * DPR; cvs.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const pad = Math.max(18, W * 0.05);
+    pegL = { x: pad, y: H * 0.2 }; pegR = { x: W - pad, y: H * 0.2 };
+    const small = W < 700;
+    yard.style.setProperty('--tw', (small ? Math.min(118, (W - 2 * pad) * 0.31 - 6) : 210) + 'px');
+    cards.forEach((c, k) => (c.at = small ? [0.17, 0.5, 0.83][k] : +c.el.dataset.at));
+    buildKnot();
+  }
+
+  // Lay a long rope out as a messy knot: hook → loops in the middle → loose end
+  function buildKnot() {
+    const cx = W * 0.5, cy = H * 0.47, A = Math.min(W * 0.2, H * 0.27), B = A * 0.62;
+    const raw = [];
+    const lead = (a, b, n) => { for (let i = 0; i < n; i++) { const s = i / n; raw.push({ x: a.x + (b.x - a.x) * s, y: a.y + (b.y - a.y) * s + Math.sin(s * Math.PI) * H * 0.12 }); } };
+    const knot = [];
+    const turns = Math.PI * 2 * 2.6;
+    for (let k = 0; k <= 420; k++) {
+      const s = (k / 420) * turns;
+      knot.push({ x: cx + A * Math.cos(s) * (0.75 + 0.25 * Math.sin(s * 0.7)) + B * Math.cos(2.7 * s + 0.6),
+                  y: cy + A * 0.78 * Math.sin(1.3 * s) + B * 0.9 * Math.sin(3.2 * s + 1.1) });
+    }
+    lead(pegL, knot[0], 60);
+    raw.push(...knot);
+    const end = { x: W * 0.68, y: H * 0.86 };
+    lead(knot[knot.length - 1], end, 40);
+    raw.push(end);
+    // resample evenly by arc length
+    const cum = [0];
+    for (let i = 1; i < raw.length; i++) cum.push(cum[i - 1] + Math.hypot(raw[i].x - raw[i - 1].x, raw[i].y - raw[i - 1].y));
+    const S = cum[cum.length - 1];
+    N = W < 700 ? 200 : 300;
+    L0 = S / (N - 1); L = L0;
+    Lt = (pegR.x - pegL.x) * 1.012 / (N - 1);
+    P = [];
+    let j = 0;
+    for (let i = 0; i < N; i++) {
+      const d = (i / (N - 1)) * S;
+      while (j < cum.length - 2 && cum[j + 1] < d) j++;
+      const f = (d - cum[j]) / (cum[j + 1] - cum[j] || 1);
+      const x = raw[j].x + (raw[j + 1].x - raw[j].x) * f, y = raw[j].y + (raw[j + 1].y - raw[j].y) * f;
+      P.push({ x, y, px: x, py: y, rx: x, ry: y });
+    }
+    hooked = false; solved = false; hold = 1; gravity = 0;
+    cards.forEach((c) => { c.el.classList.remove('on'); c.el.style.opacity = 0; });
+  }
+
+  function step() {
+    t += 1 / 60;
+    const e = P[N - 1];
+    // how far the loose end has travelled toward the right hook (0 = still knotted, 1 = at the hook)
+    let progress = 0;
+    if (grabbed === N - 1 && !hooked) {
+      const d0 = Math.hypot(e.rx - pegR.x, e.ry - pegR.y), d = Math.hypot(pointer.x - pegR.x, pointer.y - pegR.y);
+      progress = Math.max(0, Math.min(1, 1 - d / d0));
+    }
+    // the rope's length follows the pull: the further you drag, the more the loops unravel
+    let targetL, targetHold;
+    if (hooked) { targetL = Lt; targetHold = 0; gravity = 0.035; }
+    else if (grabbed === N - 1) { const k = progress * progress * (3 - 2 * progress); targetL = L0 + (Lt * 1.08 - L0) * k; targetHold = (1 - k) * 0.55; gravity = 0.04 * k; }
+    else if (grabbed >= 0) { targetL = L; targetHold = 0.35; gravity = 0; }        // tugging the middle: elastic
+    else { targetL = L0; targetHold = 1; gravity = 0; }                            // let go early: it knots itself back up
+    L += (targetL - L) * (hooked ? 0.06 : 0.12);
+    hold += (targetHold - hold) * 0.08;
+    if (hooked && !solved && Math.abs(L - Lt) < 0.02) { L = Lt; solve(); }
+
+    const breathe = touched ? 0 : 1;
+    for (let i = 0; i < N; i++) {
+      const p = P[i];
+      if (i === 0 || (hooked && i === N - 1) || i === grabbed) continue;
+      let vx = (p.x - p.px) * 0.982, vy = (p.y - p.py) * 0.982;
+      p.px = p.x; p.py = p.y;
+      const tx = p.rx + Math.sin(t * 1.3 + i * 0.05) * 2.5 * breathe, ty = p.ry + Math.cos(t * 1.1 + i * 0.07) * 2.5 * breathe;
+      vx += (tx - p.x) * 0.06 * hold; vy += (ty - p.y) * 0.06 * hold;
+      p.x += vx; p.y += vy + gravity;
+    }
+    // idle wiggle on the loose end, as an invitation
+    if (!touched && grabbed < 0) { e.x = e.rx + Math.sin(t * 3) * 6 * (Math.sin(t * 0.9) > 0.6 ? 1 : 0); e.y = e.ry; }
+    if (grabbed >= 0) { P[grabbed].x = pointer.x; P[grabbed].y = pointer.y; }
+    P[0].x = pegL.x; P[0].y = pegL.y;
+    if (hooked) { e.x = pegR.x; e.y = pegR.y; }
+    for (let k = 0, n = hooked ? 70 : 40; k < n; k++) {
+      for (let i = 1; i < N; i++) {
+        const a = P[i - 1], b = P[i];
+        const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1e-6, diff = (d - L) / d;
+        const aFixed = i - 1 === 0 || i - 1 === grabbed, bFixed = i === grabbed || (hooked && i === N - 1);
+        if (aFixed && bFixed) continue;
+        const wa = aFixed ? 0 : bFixed ? 1 : 0.5, wb = bFixed ? 0 : aFixed ? 1 : 0.5;
+        a.x += dx * diff * wa; a.y += dy * diff * wa; b.x -= dx * diff * wb; b.y -= dy * diff * wb;
+      }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // hooks
+    for (const [peg, live] of [[pegL, true], [pegR, hooked]]) {
+      ctx.fillStyle = '#c9cbce'; ctx.beginPath(); ctx.arc(peg.x, peg.y, 11, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#7d7f83'; ctx.beginPath(); ctx.arc(peg.x, peg.y, 5, 0, Math.PI * 2); ctx.fill();
+      if (!live && touched) { // pulse the target hook while dragging
+        const r = 18 + (Math.sin(t * 6) + 1) * 5;
+        ctx.strokeStyle = 'rgba(20,21,22,.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(peg.x, peg.y, r, 0, Math.PI * 2); ctx.stroke();
+      }
+    }
+    // the rope (smooth curve through the points), with a soft shadow on the wall
+    const path = new Path2D();
+    path.moveTo(P[0].x, P[0].y);
+    for (let i = 1; i < N - 1; i++) { const mx = (P[i].x + P[i + 1].x) / 2, my = (P[i].y + P[i + 1].y) / 2; path.quadraticCurveTo(P[i].x, P[i].y, mx, my); }
+    path.lineTo(P[N - 1].x, P[N - 1].y);
+    const lw = W < 700 ? 6 : 8.5;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.save(); ctx.translate(0, 7); ctx.strokeStyle = 'rgba(0,0,0,.09)'; ctx.lineWidth = lw + 3; ctx.stroke(path); ctx.restore();
+    ctx.strokeStyle = '#141516'; ctx.lineWidth = lw; ctx.stroke(path);
+    ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = lw * 0.3; ctx.stroke(path);
+    // the loose end: a bead + a little paper tag
+    if (!hooked) {
+      const e = P[N - 1], q = P[N - 4];
+      ctx.fillStyle = '#141516'; ctx.beginPath(); ctx.arc(e.x, e.y, lw * 1.25, 0, Math.PI * 2); ctx.fill();
+      if (!touched) {
+        const ang = Math.atan2(e.y - q.y, e.x - q.x);
+        ctx.save(); ctx.translate(e.x, e.y); ctx.rotate(Math.max(-0.5, Math.min(0.5, ang * 0.2)));
+        ctx.fillStyle = '#fff'; ctx.strokeStyle = '#141516'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.roundRect(14, -15, 64, 30, 6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#141516'; ctx.font = '600 14px Barlow, sans-serif'; ctx.fillText('pull me', 21, 5);
+        ctx.restore();
+      }
+      if (touched && grabbed === N - 1) { // dotted guide to the hook
+        ctx.setLineDash([4, 7]); ctx.strokeStyle = 'rgba(20,21,22,.3)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(pegR.x, pegR.y); ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+  }
+
+  function placeCards() {
+    if (!solved) return;
+    for (const c of cards) {
+      const i = Math.round(c.at * (N - 1)), p = P[i];
+      const vx = p.x - p.px;
+      // little pendulum: swings when the line moves, settles back to hanging straight
+      c.w += -0.035 * c.a - 0.07 * c.w - (vx - c.vx) * 0.02; c.vx = vx; c.a += c.w;
+      const tw = c.el.offsetWidth;
+      c.el.style.transform = `translate(${p.x - tw / 2}px, ${p.y}px) rotate(${c.a}rad)`;
+    }
+  }
+
+  function solve() {
+    solved = true;
+    hint.innerHTML = '<b>Untangled.</b> Here’s what we’ve made so far. Pluck the line if you like.';
+    again.classList.add('on');
+    cards.forEach((c, k) => setTimeout(() => {
+      c.a = (k % 2 ? -1 : 1) * 0.5; c.w = 0;
+      c.el.style.transition = 'opacity .35s'; c.el.style.opacity = 1; c.el.classList.add('on');
+    }, 120 + k * 160));
+  }
+
+  function nearest(x, y, maxD) {
+    let best = -1, bd = maxD * maxD;
+    // the loose end gets a generous grab radius
+    const e = P[N - 1], de = (e.x - x) ** 2 + (e.y - y) ** 2;
+    if (!hooked && de < (maxD * 1.8) ** 2) return N - 1;
+    for (let i = 1; i < N - (hooked ? 1 : 0); i++) { const d = (P[i].x - x) ** 2 + (P[i].y - y) ** 2; if (d < bd) { bd = d; best = i; } }
+    return best;
+  }
+  const local = (e) => { const r = cvs.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  cvs.addEventListener('pointerdown', (e) => {
+    const p = local(e); const i = nearest(p.x, p.y, 26);
+    if (i < 0) return;
+    grabbed = i; pointer = p; cvs.setPointerCapture(e.pointerId); cvs.classList.add('grabbing');
+    if (!touched) touched = true;
+  });
+  cvs.addEventListener('pointermove', (e) => { if (grabbed >= 0) pointer = local(e); });
+  const release = () => {
+    if (grabbed === N - 1 && !hooked && Math.hypot(pointer.x - pegR.x, pointer.y - pegR.y) < 46) hooked = true;
+    grabbed = -1; cvs.classList.remove('grabbing');
+  };
+  cvs.addEventListener('pointerup', release); cvs.addEventListener('pointercancel', release);
+  // also hook as soon as the end touches the peg while dragging
+  setInterval(() => { if (grabbed === N - 1 && !hooked && Math.hypot(pointer.x - pegR.x, pointer.y - pegR.y) < 30) { hooked = true; grabbed = -1; cvs.classList.remove('grabbing'); } }, 50);
+
+  again.addEventListener('click', () => {
+    again.classList.remove('on'); hint.innerHTML = '<b>Every app starts as a knot.</b> Drag the loose end onto the hook →';
+    touched = false; buildKnot();
+  });
+
+  let ro; addEventListener('resize', () => { clearTimeout(ro); ro = setTimeout(() => { touched = false; again.classList.remove('on'); layout(); }, 150); });
+  layout();
+  if (reduce) { touched = true; hooked = true; hold = 0; L = Lt; }
+  window.__knot = () => ({ end: P[N - 1], pegR, hooked, solved, L, Lt });
+  (function loop() { step(); draw(); placeCards(); requestAnimationFrame(loop); })();
+})();
+</script>
+</body>
+</html>

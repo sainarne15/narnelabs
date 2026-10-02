@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Narne Labs · Mock A</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..800&family=Mukta:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #111110; --paper: #ffffff; --soft: #f3f3f1; --rule: #e2e2de; --muted: #5d5d58;
+    --saffron: #e8590c; --night: #0b0806;
+    --display: "Anek Latin", system-ui, sans-serif; --body: "Mukta", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 18px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- top bar (sits on the dark stage) ---------- */
+  .bar { position: absolute; inset: 0 0 auto; z-index: 5; color: #f6ead6; }
+  .bar .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font: 700 22px/1 var(--display); font-variation-settings: "wdth" 88; letter-spacing: .01em; }
+  .brand img { height: 36px; width: auto; filter: invert(1) sepia(.3); }
+  .bar nav { display: flex; gap: 28px; font-size: 16px; }
+  .bar nav a { text-decoration: none; opacity: .8; } .bar nav a:hover { opacity: 1; }
+  @media (max-width: 640px) { .bar nav a:not(:last-child) { display: none; } }
+
+  /* ---------- hero: shadow theatre ---------- */
+  .stage { position: relative; min-height: 100svh; background: var(--night); color: #f6ead6; display: grid; place-items: center; padding: 110px 24px 64px; overflow: hidden; }
+  .stage::before { /* warm spill from the lamp onto the dark */
+    content: ""; position: absolute; left: 50%; top: 46%; width: 1100px; height: 900px; transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, rgba(232,140,50,.22), rgba(232,140,50,0) 70%); animation: flicker 3.2s infinite steps(1);
+  }
+  .theatre { position: relative; display: grid; justify-items: center; gap: 40px; width: 100%; }
+  .screen {
+    position: relative; width: min(560px, 86vw); aspect-ratio: 5 / 4; border-radius: 6px; overflow: hidden;
+    background: radial-gradient(ellipse 60% 62% at var(--lx, 50%) 58%, #fff1cf 0%, #ffd38a 26%, #e99a44 55%, #9b4f17 82%, #4a2108 100%);
+    box-shadow: 0 0 0 10px #1c120b, 0 0 0 11px #2b1c11, 0 30px 120px rgba(233,140,60,.35);
+    animation: glow 3.2s infinite steps(1), drift 7s ease-in-out infinite alternate;
+  }
+  .screen::after { /* cloth weave + grain */
+    content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
+    background:
+      repeating-linear-gradient(0deg, rgba(80,40,10,.07) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(80,40,10,.06) 0 1px, transparent 1px 3px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  }
+  .shadow, .penumbra { position: absolute; left: 50%; bottom: 4%; height: 88%; width: auto; transform: translateX(-50%); }
+  .shadow { filter: blur(.6px); opacity: .93; animation: sway 7s ease-in-out infinite alternate; }
+  .penumbra { filter: blur(7px); opacity: .28; animation: sway2 7s ease-in-out infinite alternate; }
+  @keyframes sway  { from { transform: translateX(-51.5%) rotate(-.6deg); } to { transform: translateX(-48.5%) rotate(.6deg); } }
+  @keyframes sway2 { from { transform: translateX(-54%) scale(1.04); } to { transform: translateX(-46%) scale(1.04); } }
+  @keyframes drift { from { --lx: 46%; } to { --lx: 54%; } }
+  @property --lx { syntax: "<percentage>"; inherits: false; initial-value: 50%; }
+  @keyframes glow { 0% { filter: brightness(1); } 12% { filter: brightness(.94); } 19% { filter: brightness(1.04); } 33% { filter: brightness(.97); } 51% { filter: brightness(1.02); } 64% { filter: brightness(.92); } 70% { filter: brightness(1); } 88% { filter: brightness(.96); } }
+  @keyframes flicker { 0% { opacity: 1; } 19% { opacity: .85; } 33% { opacity: 1; } 64% { opacity: .8; } 70% { opacity: .95; } }
+  .intro { text-align: center; max-width: 720px; }
+  .intro h1 { margin: 0; font: 700 clamp(40px, 6.4vw, 76px)/1 var(--display); font-variation-settings: "wdth" 82; letter-spacing: -.01em; }
+  .intro p { margin: 18px auto 0; max-width: 560px; color: #d9c7a8; font-size: 19px; }
+  .intro .facts { margin-top: 26px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 22px; font: 500 15px/1.4 var(--body); color: #f6ead6; }
+  .intro .facts b { color: #ffc27a; font-weight: 700; }
+  .down { display: inline-block; margin-top: 34px; padding: 13px 24px; border-radius: 999px; background: #f6ead6; color: var(--night); text-decoration: none; font-weight: 700; }
+  @media (prefers-reduced-motion: reduce) { .screen, .stage::before, .shadow, .penumbra { animation: none; } }
+
+  /* ---------- products ---------- */
+  section { padding: 104px 0; }
+  .eyebrow { font: 600 14px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--saffron); margin: 0 0 14px; }
+  h2 { margin: 0; font: 700 clamp(34px, 4.6vw, 56px)/1.02 var(--display); font-variation-settings: "wdth" 84; letter-spacing: -.01em; }
+  .lede { color: var(--muted); max-width: 560px; margin: 16px 0 0; }
+  .product { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 72px 0; border-top: 1px solid var(--rule); }
+  .product:first-of-type { margin-top: 56px; }
+  .product.flip .phones { order: 2; }
+  @media (max-width: 860px) { .product { grid-template-columns: 1fr; gap: 36px; } .product.flip .phones { order: 0; } }
+  .phones { display: flex; gap: 16px; justify-content: center; }
+  .phone { width: 46%; max-width: 230px; border-radius: 26px; padding: 7px; background: var(--ink); box-shadow: 0 30px 60px -30px rgba(0,0,0,.45); }
+  .phone img { width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 20px; }
+  .phone:nth-child(2) { transform: translateY(36px); }
+  .tag { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .tag i { width: 8px; height: 8px; border-radius: 50%; background: #1f9d55; }
+  .tag.soon i { background: var(--saffron); }
+  .product h3 { margin: 14px 0 0; font: 700 clamp(32px, 3.6vw, 44px)/1.05 var(--display); font-variation-settings: "wdth" 86; }
+  .product p { color: var(--muted); margin: 14px 0 0; }
+  .product ul { list-style: none; padding: 0; margin: 22px 0 0; border-top: 1px solid var(--rule); }
+  .product li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--rule); font-size: 16px; }
+  .product li b { font-weight: 700; }
+  .links { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-block; padding: 12px 20px; border-radius: 999px; border: 1.5px solid var(--ink); text-decoration: none; font-weight: 700; font-size: 16px; }
+  .btn.solid { background: var(--ink); color: #fff; }
+  .btn:hover { background: var(--ink); color: #fff; }
+
+  /* ---------- numbers ---------- */
+  .numbers { background: var(--soft); }
+  .ledger { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid var(--ink); }
+  @media (max-width: 760px) { .ledger { grid-template-columns: 1fr; } }
+  .ledger div { padding: 26px 24px 26px 0; border-bottom: 1px solid var(--rule); }
+  .ledger b { display: block; font: 700 clamp(48px, 6vw, 76px)/1 var(--display); font-variation-settings: "wdth" 80; }
+  .ledger span { color: var(--muted); font-size: 16px; }
+  .asof { margin-top: 18px; color: var(--muted); font-size: 14px; }
+
+  /* ---------- how we work ---------- */
+  .rules { margin-top: 44px; counter-reset: r; }
+  .rules > div { display: grid; grid-template-columns: 70px 1fr; gap: 20px; padding: 24px 0; border-top: 1px solid var(--rule); }
+  .rules > div::before { counter-increment: r; content: "0" counter(r); font: 700 22px/1.3 var(--display); color: var(--saffron); }
+  .rules h3 { margin: 0; font: 700 24px/1.25 var(--display); font-variation-settings: "wdth" 90; }
+  .rules p { margin: 6px 0 0; color: var(--muted); }
+
+  /* ---------- next / footer ---------- */
+  .next { text-align: center; }
+  .next h2 { max-width: 760px; margin: 0 auto; }
+  .next .lede { margin: 18px auto 0; }
+  .mail { display: inline-block; margin-top: 30px; font: 700 clamp(26px, 3.4vw, 40px)/1 var(--display); text-decoration-color: var(--saffron); text-underline-offset: 8px; }
+  footer { border-top: 1px solid var(--rule); padding: 36px 0 44px; font-size: 15px; color: var(--muted); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  footer .brand { color: var(--ink); font-size: 19px; }
+  footer .brand img { height: 30px; filter: none; }
+  footer nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="wrap">
+  <a class="brand" href="#"><img src="/assets/img/kalki.svg" alt="">Narne Labs</a>
+  <nav><a href="#apps">Apps</a><a href="#how">How we work</a><a href="#contact">Contact</a></nav>
+</div></header>
+
+<section class="stage">
+  <div class="theatre">
+    <div class="screen" aria-hidden="true">
+      <img class="penumbra" src="/assets/img/kalki.svg" alt="">
+      <img class="shadow" src="/assets/img/kalki.svg" alt="">
+    </div>
+    <div class="intro">
+      <h1>We build small apps that do one job well.</h1>
+      <p>Narne Labs is an independent studio. Our apps are free, private by default, and made to be used every day.</p>
+      <div class="facts"><span><b>2,600+</b> installs on Google Play</span><span><b>9,800+</b> videos compressed</span><span><b>1.5 TB</b> saved for our users</span></div>
+      <a class="down" href="#apps">See our apps ↓</a>
+    </div>
+  </div>
+</section>
+
+<section id="apps"><div class="wrap">
+  <p class="eyebrow">Our apps</p>
+  <h2>Two apps so far. More on the way.</h2>
+
+  <article class="product">
+    <div class="phones">
+      <div class="phone"><img src="/apps/compressyourvideo/img/01.webp" alt="CompressYourVideo: a 142 MB clip compressed to 3.6 MB"></div>
+      <div class="phone"><img src="/apps/compressyourvideo/img/04.webp" alt="Choosing an exact target size"></div>
+    </div>
+    <div>
+      <span class="tag"><i></i>Live · Web and Android</span>
+      <h3>CompressYourVideo</h3>
+      <p>Shrinks any video to fit WhatsApp, Discord, email and more. Your video is compressed on your own device and never uploaded.</p>
+      <ul>
+        <li><span>Installs on Google Play</span><b>2,600+</b></li>
+        <li><span>Videos compressed on the web</span><b>9,800+</b></li>
+        <li><span>Price</span><b>Free, no watermark</b></li>
+      </ul>
+      <div class="links"><a class="btn solid" href="https://compressyourvideo.com">Open web app</a><a class="btn" href="https://play.google.com/store/apps/details?id=com.compressyourvideo">Google Play</a></div>
+    </div>
+  </article>
+
+  <article class="product flip">
+    <div class="phones">
+      <div class="phone"><img src="/apps/pradakshina/img/01-counting.webp" alt="Pradakshina counting 15 of 21 rounds"></div>
+      <div class="phone"><img src="/apps/pradakshina/img/03-temples.webp" alt="Map of temples near Madurai"></div>
+    </div>
+    <div>
+      <span class="tag soon"><i></i>Coming soon · Android</span>
+      <h3>Pradakshina</h3>
+      <p>Counts your temple rounds as you walk, with the phone in your pocket. Temples near you, a panchangam and special days, in ten languages.</p>
+      <ul>
+        <li><span>Temples on the map</span><b>60,000+</b></li>
+        <li><span>Languages</span><b>10</b></li>
+        <li><span>Account needed</span><b>No</b></li>
+      </ul>
+      <div class="links"><a class="btn solid" href="/apps/pradakshina/">About the app</a><a class="btn" href="/apps/pradakshina/privacy/">Privacy</a></div>
+    </div>
+  </article>
+</div></section>
+
+<section class="numbers"><div class="wrap">
+  <p class="eyebrow">So far</p>
+  <h2>What our apps have done for people.</h2>
+  <div class="ledger">
+    <div><b>2,600+</b><span>installs on Google Play</span></div>
+    <div><b>9,800+</b><span>videos compressed on the web</span></div>
+    <div><b>1.5 TB</b><span>of phone and laptop storage saved</span></div>
+  </div>
+  <p class="asof">As of October 2026.</p>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <p class="eyebrow">How we work</p>
+  <h2>A few rules we don't break.</h2>
+  <div class="rules">
+    <div><div><h3>Your data stays with you.</h3><p>If an app can do its job on your device, it does. CompressYourVideo never uploads your video.</p></div></div>
+    <div><div><h3>No ads, no paywalls.</h3><p>Our apps are free to use, without banners or locked features.</p></div></div>
+    <div><div><h3>Small and fast.</h3><p>Each app solves one problem, opens quickly and works on any phone.</p></div></div>
+  </div>
+</div></section>
+
+<section id="contact" class="next"><div class="wrap">
+  <p class="eyebrow">Contact</p>
+  <h2>Have a question, an idea, or found a bug?</h2>
+  <p class="lede">Write to us. A real person reads every message.</p>
+  <a class="mail" href="mailto:hello@narnelabs.com">hello@narnelabs.com</a>
+</div></section>
+
+<footer><div class="wrap">
+  <a class="brand" href="#"><img src="/assets/img/kalki.svg" alt="">Narne Labs</a>
+  <nav><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+  <span>© 2026 Narne Labs</span>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Narne Labs · Mock E: the device</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Doto:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --wall: #e6e7e9; --ink: #141516; --muted: #5f6266; --ui: "Barlow", system-ui, sans-serif;
+          --amber: #ffb547; --amber-dim: rgba(255,181,71,.16); --orange: #ff6a1a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--wall); color: var(--ink); font: 18px/1.55 var(--ui); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  header { max-width: 1240px; margin: 0 auto; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; text-decoration: none; }
+  .brand img { height: 34px; width: auto; }
+  header nav { display: flex; gap: 26px; font-size: 16px; font-weight: 500; }
+  header nav a { text-decoration: none; color: var(--muted); } header nav a:hover { color: var(--ink); }
+  @media (max-width: 600px) { header nav a:not(:last-child) { display: none; } }
+
+  .hero { max-width: 1240px; margin: 0 auto; padding: 22px 28px 70px; text-align: center; }
+  .hero h1 { margin: 0 auto; font-weight: 700; font-size: clamp(32px, 4.2vw, 54px); line-height: 1.05; letter-spacing: -.015em; }
+  .hero > p { margin: 12px auto 0; color: var(--muted); font-size: 19px; max-width: 44ch; }
+  .stage { margin: 46px auto 0; width: min(880px, 100%); }
+  .help { margin-top: 26px; color: var(--muted); font-size: 15px; }
+  .help kbd { font: 600 13px var(--ui); border: 1px solid #b9bbbe; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: #f3f3f4; }
+
+  /* ---------------- the device (everything scales with its width via cqw) ---------------- */
+  .device-wrap { container-type: inline-size; }
+  .device {
+    position: relative; aspect-ratio: 16 / 10.4; border-radius: 3.4cqw; padding: 3.2cqw;
+    background: linear-gradient(180deg, #f4f3ef 0%, #dddcd6 100%);
+    box-shadow: inset 0 .25cqw 0 rgba(255,255,255,.9), inset 0 -.5cqw 0 rgba(0,0,0,.08), 0 .4cqw 0 #c5c4be, 0 5cqw 8cqw -3cqw rgba(0,0,0,.45), 0 2cqw 3cqw -2cqw rgba(0,0,0,.3);
+    display: grid; grid-template-columns: 1fr 22cqw; grid-template-rows: auto 1fr auto; gap: 2.4cqw 3cqw;
+    grid-template-areas: "top top" "lcd dial" "keys grille";
+    text-align: left; user-select: none; -webkit-user-select: none;
+  }
+  .screw { position: absolute; width: 1.6cqw; height: 1.6cqw; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fbfbf9, #b6b5ae); box-shadow: inset 0 0 0 .12cqw rgba(0,0,0,.18); }
+  .screw::after { content: ""; position: absolute; left: 20%; right: 20%; top: calc(50% - .1cqw); height: .2cqw; background: rgba(0,0,0,.35); transform: rotate(var(--r, 30deg)); }
+  .screw:nth-child(1) { left: 1.3cqw; top: 1.3cqw; } .screw:nth-child(2) { right: 1.3cqw; top: 1.3cqw; --r: -20deg; }
+  .screw:nth-child(3) { left: 1.3cqw; bottom: 1.3cqw; --r: 70deg; } .screw:nth-child(4) { right: 1.3cqw; bottom: 1.3cqw; --r: 10deg; }
+
+  .top { grid-area: top; display: flex; align-items: center; gap: 2cqw; font: 700 1.55cqw/1 var(--ui); letter-spacing: .32em; color: #3a3b3d; }
+  .top .model { font-weight: 500; color: #8b8c8e; letter-spacing: .24em; }
+  .top .pwr { margin-left: auto; display: flex; align-items: center; gap: 1cqw; font-weight: 600; color: #8b8c8e; letter-spacing: .2em; }
+  .led { width: 1.15cqw; height: 1.15cqw; border-radius: 50%; background: #ff3b2f; box-shadow: 0 0 1.4cqw #ff3b2f, inset 0 -.2cqw .3cqw rgba(0,0,0,.25); }
+
+  /* LCD */
+  .lcd { grid-area: lcd; position: relative; border-radius: 1.6cqw; padding: .9cqw; background: #2b2c2e; box-shadow: inset 0 .3cqw .6cqw rgba(0,0,0,.6), 0 .2cqw 0 rgba(255,255,255,.7); }
+  .glass { position: relative; height: 100%; border-radius: 1cqw; overflow: hidden; background: radial-gradient(120% 120% at 30% 20%, #1b1a17, #0d0c0b 70%); padding: 1.8cqw 2.2cqw; display: grid; grid-template-rows: auto 1fr auto; color: var(--amber); font-family: "Doto", monospace; font-weight: 800; text-shadow: 0 0 .9cqw rgba(255,181,71,.45); }
+  .glass::after { /* pixel grid + glare */ content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,0) 38%), repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px); }
+  .row1 { display: flex; justify-content: space-between; font-size: 1.9cqw; letter-spacing: .08em; }
+  .row1 .idx { opacity: .65; }
+  .name { font-size: 3.6cqw; line-height: 1.05; margin-top: .6cqw; letter-spacing: .02em; }
+  .anim { position: relative; min-height: 0; display: grid; align-items: center; }
+  .anim canvas { width: 100%; height: 100%; image-rendering: pixelated; }
+  .row3 { display: flex; justify-content: space-between; align-items: center; font-size: 1.9cqw; letter-spacing: .06em; }
+  .row3 .readout { opacity: .9; }
+  .glass.flash { animation: flash .25s steps(2); }
+  @keyframes flash { 50% { filter: brightness(1.8); } }
+
+  /* dial */
+  .dialbox { grid-area: dial; display: grid; place-items: center; position: relative; }
+  .ticks { position: absolute; width: 19cqw; height: 19cqw; border-radius: 50%;
+    background: repeating-conic-gradient(from -1deg, #9c9b95 0 2deg, transparent 2deg 30deg); -webkit-mask: radial-gradient(circle, transparent 8.3cqw, #000 8.4cqw, #000 9.4cqw, transparent 9.5cqw); mask: radial-gradient(circle, transparent 8.3cqw, #000 8.4cqw, #000 9.4cqw, transparent 9.5cqw); }
+  .dial { position: relative; width: 15cqw; height: 15cqw; border-radius: 50%; cursor: grab; touch-action: none; outline: none;
+    background: radial-gradient(circle at 50% 50%, #ececE8 0 50%, transparent 51%), repeating-conic-gradient(#d9d8d2 0 3deg, #c9c8c1 3deg 6deg);
+    box-shadow: 0 .5cqw 0 #b3b2ab, 0 1.6cqw 2.4cqw -1cqw rgba(0,0,0,.45), inset 0 .2cqw 0 #fff; transform: rotate(var(--rot, 0deg)); }
+  .dial:active { cursor: grabbing; }
+  .dial:focus-visible { box-shadow: 0 .5cqw 0 #b3b2ab, 0 0 0 .5cqw rgba(255,106,26,.5); }
+  .dial::before { content: ""; position: absolute; left: calc(50% - .55cqw); top: 1.3cqw; width: 1.1cqw; height: 3.4cqw; border-radius: 1cqw; background: var(--orange); }
+  .dial-label { position: absolute; bottom: -1.4cqw; font: 600 1.3cqw/1 var(--ui); letter-spacing: .3em; color: #8b8c8e; }
+
+  /* keys */
+  .keys { grid-area: keys; display: flex; gap: 1.6cqw; align-items: flex-end; }
+  .key { position: relative; flex: 1; height: 10.5cqw; border: 0; border-radius: 1.4cqw; cursor: pointer; padding: 1.2cqw; text-align: left;
+    background: linear-gradient(180deg, #fbfaf7, #e6e5df); color: #2a2b2d; font-family: var(--ui);
+    box-shadow: 0 .7cqw 0 #bdbcb5, 0 1.2cqw 1.6cqw -.6cqw rgba(0,0,0,.45), inset 0 .15cqw 0 #fff; transition: transform .06s, box-shadow .06s; }
+  .key .num { display: block; font: 700 1.5cqw/1 var(--ui); letter-spacing: .14em; color: #8b8c8e; }
+  .key .lab { position: absolute; left: 1.2cqw; bottom: 1.2cqw; font: 700 2cqw/1 var(--ui); letter-spacing: .04em; }
+  .key .kled { position: absolute; right: 1.2cqw; top: 1.2cqw; width: .95cqw; height: .95cqw; border-radius: 50%; background: #c9c8c2; box-shadow: inset 0 .15cqw .2cqw rgba(0,0,0,.2); }
+  .key.sel .kled { background: var(--orange); box-shadow: 0 0 1cqw var(--orange); }
+  .key.down, .key:active { transform: translateY(.55cqw); box-shadow: 0 .15cqw 0 #bdbcb5, 0 .4cqw .8cqw -.4cqw rgba(0,0,0,.45), inset 0 .15cqw 0 #fff; }
+  .key.open { flex: 1.25; background: linear-gradient(180deg, #ff8a3d, var(--orange)); color: #fff; box-shadow: 0 .7cqw 0 #c24a0a, 0 1.2cqw 1.6cqw -.6cqw rgba(0,0,0,.45), inset 0 .15cqw 0 rgba(255,255,255,.45); }
+  .key.open .num { color: rgba(255,255,255,.75); }
+  .key.open.down, .key.open:active { box-shadow: 0 .15cqw 0 #c24a0a, inset 0 .15cqw 0 rgba(255,255,255,.45); }
+  .key:focus-visible { outline: .4cqw solid rgba(255,106,26,.55); outline-offset: .3cqw; }
+
+  /* grille + sound switch */
+  .grille { grid-area: grille; display: grid; grid-template-rows: 1fr auto; gap: 1.4cqw; }
+  .holes { border-radius: 1cqw; background: radial-gradient(circle, #6f6e69 .42cqw, transparent .5cqw) 0 0 / 1.6cqw 1.6cqw; opacity: .8; }
+  .switch { display: flex; align-items: center; justify-content: space-between; font: 600 1.3cqw/1 var(--ui); letter-spacing: .26em; color: #8b8c8e; cursor: pointer; }
+  .switch input { display: none; }
+  .switch .track { position: relative; width: 6cqw; height: 2.6cqw; border-radius: 2cqw; background: #c4c3bc; box-shadow: inset 0 .25cqw .4cqw rgba(0,0,0,.25); }
+  .switch .track::after { content: ""; position: absolute; top: .3cqw; left: .3cqw; width: 2.6cqw; height: 2cqw; border-radius: 1cqw; background: linear-gradient(#fbfaf7, #dddcd6); box-shadow: 0 .2cqw .3cqw rgba(0,0,0,.3); transition: transform .15s; }
+  .switch input:checked + .track { background: #2b2c2e; }
+  .switch input:checked + .track::after { transform: translateX(2.8cqw); }
+
+  /* phones: restack the device so keys stay big enough to press */
+  @container (max-width: 560px) {
+    .device { aspect-ratio: auto; border-radius: 6cqw; padding: 6cqw 5cqw; gap: 4.5cqw 4cqw; grid-template-columns: 1fr 34cqw; grid-template-areas: "top top" "lcd lcd" "keys keys" "grille dial"; }
+    .screw { width: 2.8cqw; height: 2.8cqw; } .screw:nth-child(1), .screw:nth-child(3) { left: 2cqw; } .screw:nth-child(2), .screw:nth-child(4) { right: 2cqw; }
+    .screw:nth-child(1), .screw:nth-child(2) { top: 2cqw; } .screw:nth-child(3), .screw:nth-child(4) { bottom: 2cqw; }
+    .top { font-size: 2.8cqw; gap: 3cqw; } .top .model { display: none; } .led { width: 2.2cqw; height: 2.2cqw; }
+    .lcd { height: 56cqw; border-radius: 3cqw; padding: 1.6cqw; } .glass { border-radius: 2cqw; padding: 3.4cqw 4cqw; }
+    .row1, .row3 { font-size: 3.4cqw; } .name { font-size: 6.2cqw; margin-top: 1.2cqw; }
+    .keys { gap: 2.6cqw; } .key { height: 19cqw; border-radius: 2.6cqw; padding: 2.2cqw; }
+    .key .num { font-size: 2.6cqw; } .key .lab { left: 2.2cqw; bottom: 2.2cqw; font-size: 3.6cqw; } .key .kled { right: 2.2cqw; top: 2.2cqw; width: 1.8cqw; height: 1.8cqw; }
+    .key.down, .key:active { transform: translateY(1cqw); }
+    .dialbox { height: 34cqw; } .dial { width: 26cqw; height: 26cqw; } .dial::before { left: calc(50% - 1cqw); top: 2.2cqw; width: 2cqw; height: 5.6cqw; }
+    .ticks { display: none; } .dial-label { font-size: 2.4cqw; bottom: -1cqw; }
+    .grille { gap: 3cqw; } .holes { min-height: 20cqw; background-size: 3cqw 3cqw; background-image: radial-gradient(circle, #6f6e69 .8cqw, transparent .9cqw); }
+    .switch { font-size: 2.6cqw; } .switch .track { width: 11cqw; height: 5cqw; border-radius: 4cqw; } .switch .track::after { top: .6cqw; left: .6cqw; width: 5cqw; height: 3.8cqw; border-radius: 2cqw; }
+    .switch input:checked + .track::after { transform: translateX(4.8cqw); }
+  }
+  .facts { max-width: 1240px; margin: 0 auto; padding: 30px 28px; display: flex; flex-wrap: wrap; gap: 18px 48px; justify-content: center; border-top: 1px solid #cfd0d3; }
+  .facts div { text-align: center; } .facts b { display: block; font-size: 30px; line-height: 1.1; } .facts span { color: var(--muted); font-size: 15px; }
+  footer { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 15px; border-top: 1px solid #cfd0d3; }
+  footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#"><img src="/assets/img/kalki.svg" alt="">Narne Labs</a>
+  <nav><a href="#apps">Apps</a><a href="#studio">Studio</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
+</header>
+
+<section class="hero" id="apps">
+  <h1>Small apps for everyday problems.</h1>
+  <p>Built by Narne Labs. Free, private, and made to be used every day.</p>
+
+  <div class="stage">
+    <div class="device-wrap">
+      <div class="device" id="device">
+        <span class="screw"></span><span class="screw"></span><span class="screw"></span><span class="screw"></span>
+        <div class="top"><span>NARNE LABS</span><span class="model">NL-1 · APP PLAYER</span><span class="pwr">ON <i class="led"></i></span></div>
+
+        <div class="lcd"><div class="glass" id="glass" aria-live="polite">
+          <div class="row1"><span class="idx" id="idx">01/03</span><span id="kind">WEB + ANDROID</span></div>
+          <div><div class="name" id="name">COMPRESSYOURVIDEO</div><div class="anim"><canvas id="scr" width="160" height="44"></canvas></div></div>
+          <div class="row3"><span class="readout" id="readout">248.0 MB</span><span id="status">● LIVE</span></div>
+        </div></div>
+
+        <div class="dialbox"><span class="ticks"></span><div class="dial" id="dial" role="slider" tabindex="0" aria-label="Choose an app" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1"></div><span class="dial-label">SELECT</span></div>
+
+        <div class="keys">
+          <button class="key sel" data-i="0"><span class="num">01</span><span class="lab">CYV</span><i class="kled"></i></button>
+          <button class="key" data-i="1"><span class="num">02</span><span class="lab">PRD</span><i class="kled"></i></button>
+          <button class="key" data-i="2"><span class="num">03</span><span class="lab">???</span><i class="kled"></i></button>
+          <button class="key open" id="open"><span class="num">GO</span><span class="lab">OPEN ▸</span></button>
+        </div>
+
+        <div class="grille"><span class="holes"></span><label class="switch">SOUND <input type="checkbox" id="snd" checked><span class="track"></span></label></div>
+      </div>
+    </div>
+    <p class="help">Press a key or turn the dial. Keyboard: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>, <kbd>←</kbd> <kbd>→</kbd>, <kbd>Enter</kbd></p>
+  </div>
+</section>
+
+<section class="facts" id="studio">
+  <div><b>2</b><span>apps out, more on the way</span></div>
+  <div><b>1</b><span>in the lab right now</span></div>
+  <div><b>0</b><span>ads or paywalls in any of our apps</span></div>
+</section>
+
+<footer>
+  <span>© 2026 Narne Labs · <a href="mailto:hello@narnelabs.com">hello@narnelabs.com</a></span>
+  <nav><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+</footer>
+
+<script>
+(() => {
+  const APPS = [
+    { name: 'COMPRESSYOURVIDEO', kind: 'WEB + ANDROID', status: '● LIVE', href: '/apps/compressyourvideo/', anim: 'squeeze' },
+    { name: 'PRADAKSHINA', kind: 'ANDROID', status: '◐ SOON', href: '/apps/pradakshina/', anim: 'laps' },
+    { name: 'NEXT APP', kind: 'TBA', status: '○ IN THE LAB', href: 'mailto:hello@narnelabs.com?subject=Next%20app', anim: 'lab' },
+  ];
+  const $ = (id) => document.getElementById(id);
+  const glass = $('glass'), cvs = $('scr'), g = cvs.getContext('2d');
+  const keys = [...document.querySelectorAll('.key[data-i]')], dial = $('dial'), snd = $('snd');
+  let cur = 0, t0 = performance.now(), rot = 0;
+
+  // ---- sound: tiny synthesized clicks, no audio files ----
+  let ac;
+  function click(kind = 'key') {
+    if (!snd.checked) return;
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const now = ac.currentTime;
+    const len = kind === 'tick' ? 0.012 : 0.035;
+    const buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 4);
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = kind === 'tick' ? 4200 : 2600; bp.Q.value = 1.2;
+    const gn = ac.createGain(); gn.gain.value = kind === 'tick' ? 0.35 : 0.6;
+    src.connect(bp).connect(gn).connect(ac.destination); src.start(now);
+    if (kind !== 'tick') { // low thump of the key bottoming out
+      const o = ac.createOscillator(), og = ac.createGain(); o.frequency.setValueAtTime(140, now); o.frequency.exponentialRampToValueAtTime(60, now + 0.06);
+      og.gain.setValueAtTime(0.25, now); og.gain.exponentialRampToValueAtTime(0.001, now + 0.08); o.connect(og).connect(ac.destination); o.start(now); o.stop(now + 0.09);
+    }
+  }
+
+  function select(i, fromDial) {
+    cur = (i + APPS.length) % APPS.length; t0 = performance.now();
+    const a = APPS[cur];
+    $('idx').textContent = String(cur + 1).padStart(2, '0') + '/' + String(APPS.length).padStart(2, '0');
+    $('kind').textContent = a.kind; $('name').textContent = a.name; $('status').textContent = a.status;
+    keys.forEach((k, j) => k.classList.toggle('sel', j === cur));
+    dial.setAttribute('aria-valuenow', cur + 1);
+    glass.classList.remove('flash'); void glass.offsetWidth; glass.classList.add('flash');
+    if (!fromDial) { rot = cur * 30; dial.style.setProperty('--rot', rot + 'deg'); }
+  }
+
+  // ---- LCD animations (drawn at 160x44 and scaled up, so they look like a real dot-matrix) ----
+  const AMB = '#ffb547';
+  function px(x, y, w = 1, h = 1) { g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }
+  function frame(now) {
+    const t = (now - t0) / 1000;
+    g.clearRect(0, 0, 160, 44); g.fillStyle = AMB;
+    const a = APPS[cur];
+    if (a.anim === 'squeeze') {
+      // a big file gets pressed down to a small one, again and again
+      const p = (t % 3.2) / 3.2, k = p < 0.15 ? 0 : p < 0.55 ? (p - 0.15) / 0.4 : p < 0.85 ? 1 : 1 - (p - 0.85) / 0.15;
+      const e = k * k * (3 - 2 * k);
+      const w = 70 - 52 * e, h = 34 - 22 * e, x = 30, y = 40 - h;
+      g.globalAlpha = 1; px(x, y, w, 1); px(x, y + h - 1, w, 1); px(x, y, 1, h); px(x + w - 1, y, 1, h);
+      g.globalAlpha = 0.35; for (let yy = y + 3; yy < y + h - 2; yy += 3) for (let xx = x + 3; xx < x + w - 2; xx += 3) px(xx, yy);
+      g.globalAlpha = 1; const plate = y - 4; px(x - 6, plate, w + 12, 2); px(x + w / 2 - 1, 0, 2, plate); // press ram
+      px(118, 22, 8, 1); px(124, 20, 1, 1); px(124, 24, 1, 1); px(125, 21, 1, 3); // arrow
+      px(132, 30, 16, 10); g.globalAlpha = 0.35; px(134, 32, 12, 6); g.globalAlpha = 1;
+      $('readout').textContent = (248 - e * (248 - 15.8)).toFixed(1) + ' MB';
+    } else if (a.anim === 'laps') {
+      // a walker going round a loop, counting rounds
+      const cx = 80, cy = 22, r = 17, lapT = 2.4, laps = Math.floor(t / lapT) + 1, ang = ((t % lapT) / lapT) * Math.PI * 2 - Math.PI / 2;
+      g.globalAlpha = 0.35; for (let s = 0; s < 64; s++) { const q = (s / 64) * Math.PI * 2; px(cx + Math.cos(q) * r * 2.2, cy + Math.sin(q) * r); }
+      g.globalAlpha = 1; for (let s = 0; s < 10; s++) { const q = ang - s * 0.09; g.globalAlpha = 1 - s / 10; px(cx + Math.cos(q) * r * 2.2 - 1, cy + Math.sin(q) * r - 1, 3, 3); }
+      g.globalAlpha = 1; $('readout').textContent = 'ROUND ' + String(Math.min(laps, 21)).padStart(2, '0') + ' / 21';
+    } else {
+      // pixels assembling into a question mark, then scattering again
+      const Q = ['..####..', '.##..##.', '.....##.', '....##..', '...##...', '...##...', '........', '...##...'];
+      const p = (t % 3) / 3, k = p < 0.6 ? Math.min(1, p / 0.45) : 1 - (p - 0.6) / 0.4;
+      for (let r = 0; r < Q.length; r++) for (let c = 0; c < 8; c++) if (Q[r][c] === '#') {
+        const seed = Math.sin((r * 8 + c) * 91.7) * 43758.5, rx = (seed - Math.floor(seed)) * 160, ry = ((seed * 7) % 1 + 1) % 1 * 44;
+        const tx = 64 + c * 4, ty = 4 + r * 4.5; px(rx + (tx - rx) * k, ry + (ty - ry) * k, 3, 3);
+      }
+      const dots = '.'.repeat(1 + Math.floor(t * 3) % 3);
+      $('readout').textContent = 'COMPILING' + dots.padEnd(3, ' ');
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // ---- input ----
+  const press = (el, fn) => {
+    el.addEventListener('pointerdown', () => { el.classList.add('down'); click('key'); });
+    const up = () => el.classList.remove('down');
+    el.addEventListener('pointerup', up); el.addEventListener('pointerleave', up);
+    el.addEventListener('click', fn);
+  };
+  keys.forEach((k, i) => press(k, () => select(i)));
+  press($('open'), () => { location.href = APPS[cur].href; });
+
+  // dial: drag to turn; every 30 degrees clicks over to the next app
+  let dragging = false, lastA = 0, acc = 0, moved = false;
+  const angleAt = (e) => { const r = dial.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI; };
+  dial.addEventListener('pointerdown', (e) => { dragging = true; moved = false; lastA = angleAt(e); acc = 0; dial.setPointerCapture(e.pointerId); });
+  dial.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    let a = angleAt(e), d = a - lastA; if (d > 180) d -= 360; if (d < -180) d += 360; lastA = a;
+    rot += d; acc += d; dial.style.setProperty('--rot', rot + 'deg');
+    while (acc >= 30) { acc -= 30; moved = true; click('tick'); select(cur + 1, true); }
+    while (acc <= -30) { acc += 30; moved = true; click('tick'); select(cur - 1, true); }
+  });
+  dial.addEventListener('pointerup', () => { dragging = false; if (!moved) { rot += 30; dial.style.setProperty('--rot', rot + 'deg'); click('tick'); select(cur + 1, true); } });
+  addEventListener('keydown', (e) => {
+    if (e.target.closest('input, textarea')) return;
+    if (['1', '2', '3'].includes(e.key)) { const k = keys[+e.key - 1]; k.classList.add('down'); click('key'); setTimeout(() => k.classList.remove('down'), 120); select(+e.key - 1); }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const d = e.key === 'ArrowRight' ? 1 : -1; rot += d * 30; dial.style.setProperty('--rot', rot + 'deg'); click('tick'); select(cur + d, true); }
+    if (e.key === 'Enter' && document.activeElement === document.body) location.href = APPS[cur].href;
+  });
+
+  select(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
