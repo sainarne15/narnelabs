@@ -323,8 +323,7 @@
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
       tl.to($$('.hero__title .word-inner'), { y: 0, duration: 1.4, stagger: 0.08 }, 0.1)
         .to($$('.hero .reveal'), { opacity: 1, y: 0, duration: 1.2, stagger: 0.09 }, 0.35)
-        .from($$('.hud'), { opacity: 0, duration: 1.2, stagger: 0.1 }, 0.6)
-        .from('.nav', { y: -30, opacity: 0, duration: 1.2 }, 0.2);
+        .from($$('.hud'), { opacity: 0, duration: 1.2, stagger: 0.1 }, 0.6);
 
       // hero content drifts as you scroll away
       gsap.to('.hero__content', {
@@ -366,11 +365,15 @@
     // Counters
     $$('[data-count]').forEach((el) => {
       const end = Number(el.dataset.count);
+      const dec = Number(el.dataset.decimals || 0);
+      const suffix = el.dataset.suffix || '';
+      const fmt = (v) => v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (suffix ? `<small>${suffix}</small>` : '');
       const obj = { v: end === 0 ? 1024 : 0 };
+      el.innerHTML = fmt(obj.v);
       gsap.to(obj, {
-        v: end, duration: 2, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 88%' },
-        onUpdate: () => (el.textContent = Math.round(obj.v)),
+        v: end, duration: 2.2, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 90%' },
+        onUpdate: () => (el.innerHTML = fmt(dec ? obj.v : Math.round(obj.v))),
       });
     });
 

@@ -605,3 +605,8 @@ main, .page, .footer { overflow-x: clip; } /* no sideways scroll on phones */
 .theme-violet .product-id img { box-shadow: 0 12px 40px -10px rgba(124, 58, 237, 0.7); }
 .theme-violet .cta-band { background: radial-gradient(120% 140% at 50% 0%, rgba(124,58,237,0.18), rgba(14,15,25,0.7) 60%); }
 .feature .hero__cta { margin-top: 18px; }
+/* nav fades in with CSS (opacity only — its transform is reserved for centering + hide-on-scroll) */
+.anim-ready .nav { animation: nav-in 1s var(--ease) 0.3s both; }
+@keyframes nav-in { from { opacity: 0; } }
+
+.stat b small { font-size: 0.5em; margin-left: 2px; }
