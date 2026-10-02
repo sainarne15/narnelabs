@@ -38,13 +38,11 @@ Use a local server rather than opening the file directly, because the site uses 
    | A     | @           | 185.199.109.153       |
    | A     | @           | 185.199.110.153       |
    | A     | @           | 185.199.111.153       |
-   | AAAA  | @           | 2606:50c0:8000::153   |
-   | AAAA  | @           | 2606:50c0:8001::153   |
-   | AAAA  | @           | 2606:50c0:8002::153   |
-   | AAAA  | @           | 2606:50c0:8003::153   |
    | CNAME | www         | sainarne15.github.io  |
 
-   Delete any existing "parking" A records or URL-forward records for `@` and `www`.
+   Optional IPv6 (AAAA, host `@`): `2606:50c0:8000:0:0:0:0:153`, `…8001…`, `…8002…`, `…8003…`. Namecheap rejects the short `::` form, so write them out in full. You can skip them; the A records alone are enough.
+
+   Delete any existing "parking" A records or URL-forward records for `@` and `www`. On Namecheap these are the default `www → parkingpage.namecheap.com` CNAME and the `@` URL Redirect.
 5. Once the DNS check passes (usually minutes, at most a few hours), tick **Enforce HTTPS**.
 6. Recommended: in **GitHub → Settings (your profile) → Pages → Verified domains**, verify narnelabs.com so nobody else can claim it on GitHub Pages.
 
