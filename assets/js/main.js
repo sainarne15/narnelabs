@@ -102,7 +102,8 @@
     lastY = y;
     let current = null;
     navLinks.forEach((a) => {
-      const s = $(a.getAttribute('href'));
+      const href = a.getAttribute('href');
+      const s = href && href.startsWith('#') ? $(href) : null; // links to other pages (e.g. "/#apps") aren't sections here
       if (s && s.getBoundingClientRect().top < window.innerHeight * 0.4) current = a;
     });
     navLinks.forEach((a) => a.classList.toggle('is-active', a === current));
