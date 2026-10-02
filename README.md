@@ -83,7 +83,7 @@ Every later `git push` to `main` redeploys within about a minute.
    `python -c "from PIL import Image; im=Image.open('x.png').convert('RGB'); im.thumbnail((540,960)); im.save('x.webp', quality=82)"`
 4. Add the product's legal pages under it: `privacy/`, plus `delete/` if it has accounts, and `terms/` if needed.
 5. On the home page (`index.html`), add a card in the `.apps` grid and a footer link. Bump the `PRODUCTS 0N` counter in the hero HUD.
-6. Add the new URLs to `sitemap.xml`, and add a link in `privacy/index.html` under *App privacy policies*.
+6. Run `python tools/sitemap.py` to regenerate `sitemap.xml`, and add a link in `privacy/index.html` under *App privacy policies*.
 
 ## Device support
 

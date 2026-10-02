@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://narnelabs.com/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://narnelabs.com/apps/compressyourvideo/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://narnelabs.com/apps/compressyourvideo/privacy/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://narnelabs.com/apps/pradakshina/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://narnelabs.com/apps/pradakshina/privacy/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://narnelabs.com/apps/pradakshina/delete/</loc><lastmod>2026-10-02</lastmod></url>
-  <url><loc>https://narnelabs.com/apps/pradakshina/terms/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://narnelabs.com/privacy/</loc><lastmod>2026-10-02</lastmod></url>
   <url><loc>https://narnelabs.com/terms/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://narnelabs.com/apps/compressyourvideo/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://narnelabs.com/apps/pradakshina/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://narnelabs.com/apps/compressyourvideo/privacy/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://narnelabs.com/apps/pradakshina/delete/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://narnelabs.com/apps/pradakshina/privacy/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://narnelabs.com/apps/pradakshina/terms/</loc><lastmod>2026-10-02</lastmod></url>
 </urlset>
