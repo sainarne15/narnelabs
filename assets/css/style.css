@@ -610,3 +610,9 @@ main, .page, .footer { overflow-x: clip; } /* no sideways scroll on phones */
 @keyframes nav-in { from { opacity: 0; } }
 
 .stat b small { font-size: 0.5em; margin-left: 2px; }
+
+/* Brand mark (Kalki) */
+.brandmark { display: block; height: auto; }
+.nav__brand .brandmark { height: 38px; width: auto; margin: -4px 0; }
+.preloader__logo .brandmark { height: 110px; width: auto; }
+.footer__brand .brandmark { height: 72px; width: auto; }

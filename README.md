@@ -16,6 +16,19 @@ assets/js/main.js               Interactions: preloader, smooth scroll, reveals,
 CNAME                           Custom domain for GitHub Pages
 ```
 
+## Brand
+
+The logo is the **Kalki rider**: a crowned warrior on a rearing horse with a sword raised. It's a solid single-colour silhouette.
+
+| File | Use |
+|------|-----|
+| `assets/img/kalki.svg` | Master mark, black, for light backgrounds and print |
+| `assets/img/kalki-white.svg` | White mark for dark backgrounds (used across the site) |
+| `assets/img/favicon.svg`, `favicon-32.png` | Small mark: crowned rider + sword + horse head on a dark tile |
+| `assets/img/icon-180.png`, `icon-512.png` | Apple touch icon, and the store/social avatar |
+
+The full rider becomes hard to read below about 64px. For anything small, use the favicon crop.
+
 ## Run locally
 
 ```bash
