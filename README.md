@@ -5,14 +5,13 @@ The website for **Narne Labs**, the studio behind CompressYourVideo, Pradakshina
 It's a plain static site, so there's no build step and nothing to install. It's served by GitHub Pages at https://narnelabs.com.
 
 ```
-index.html                      Home: WebGL hero, apps, capabilities, manifesto, process, contact
+index.html                      Home: Narne Town (isometric SVG town, one building per app), app list, studio facts
 apps/
   compressyourvideo/            Product: overview, privacy & legal, screenshots in img/
   pradakshina/                  Product: overview, privacy policy, delete-your-data, screenshots in img/
 privacy/  terms/  404.html      Company legal pages
 assets/css/style.css            All styles (product accent themes: .theme-ember, .theme-violet, .theme-cyan)
-assets/js/scene.js              Three.js scene: shader orb + morphing particle field (falls back gracefully)
-assets/js/main.js               Interactions: preloader, smooth scroll, reveals, tilt, cursor
+assets/js/scene.js, main.js     Background + interactions used by the product and legal pages
 CNAME                           Custom domain for GitHub Pages
 ```
 
@@ -84,6 +83,20 @@ Every later `git push` to `main` redeploys within about a minute.
 4. Add the product's legal pages under it: `privacy/`, plus `delete/` if it has accounts, and `terms/` if needed.
 5. On the home page (`index.html`), add a card in the `.apps` grid and a footer link. Bump the `PRODUCTS 0N` counter in the hero HUD.
 6. Run `python tools/sitemap.py` to regenerate `sitemap.xml`, and add a link in `privacy/index.html` under *App privacy policies*.
+
+## Narne Town (homepage)
+
+The homepage is a self-contained, hand-built isometric town in `index.html`: plain SVG plus vanilla JS, with no libraries.
+
+- **One building per app.** To add an app, add a building block (see the HQ and factory code for `box`, `facade`, `wallText`, `shadow`) and an entry in `PINS`.
+- **Traffic rules:** a 20-second light cycle. Cars queue and keep their distance. Pedestrians keep to their side of the sidewalk and only cross on the zebra crossings while that road is held.
+- **Performance:**
+  - moving parts are built once and only updated per frame
+  - the animation pauses off-screen or in background tabs
+  - it drops to 30 fps on slow devices
+  - it renders a still frame for `prefers-reduced-motion`
+
+Other homepage concepts (the Knot, the Device, the split-flap board) live on the `concepts` branch.
 
 ## Device support
 
