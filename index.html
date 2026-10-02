@@ -61,13 +61,47 @@
   @media (max-width: 700px) { .panel { position: relative; left: auto; bottom: auto; margin: 12px auto 0; width: 100%; display: none; } .panel.on { display: block; } }
   .help { margin-top: 6px; color: var(--muted); font-size: 15px; }
 
-  .applist { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; } /* read by screen readers and search engines, not shown */
-  .applist a { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: #fff; border-radius: 14px; text-decoration: none; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 10px 24px -18px rgba(0,0,0,.35); transition: transform .2s, box-shadow .2s; }
-  .applist a:hover { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 16px 30px -18px rgba(0,0,0,.45); }
-  .applist img, .applist i { width: 44px; height: 44px; border-radius: 11px; flex: none; }
-  .applist i { display: grid; place-items: center; border: 2px dashed #b8babd; color: #9a9ca0; font: 700 20px var(--ui); font-style: normal; }
-  .applist b { display: block; font-size: 17px; line-height: 1.2; } .applist small { color: var(--muted); font-size: 14px; }
-  @media (max-width: 760px) { .applist { grid-template-columns: 1fr; } }
+  header { position: relative; z-index: 30; }
+  .navbtn { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; font: inherit; color: var(--muted); cursor: pointer; }
+  .navbtn:hover, .navbtn[aria-expanded="true"] { color: var(--ink); }
+  .navbtn svg { transition: transform .25s; } .navbtn[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .scrim { position: fixed; inset: 0; z-index: 25; background: rgba(20,21,22,.0); transition: background .25s; }
+  .scrim.on { background: rgba(20,21,22,.28); }
+  .apps-panel { position: absolute; z-index: 40; top: 64px; left: 50%; width: min(860px, calc(100% - 32px)); transform: translate(-50%, -8px);
+    background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 30px 60px -24px rgba(0,0,0,.4), 0 1px 0 rgba(0,0,0,.04);
+    opacity: 0; visibility: hidden; transition: opacity .22s, transform .22s, visibility 0s .22s; }
+  .apps-panel.on { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition: opacity .22s, transform .22s; }
+  .grab { display: none; }
+  .ap-head { display: flex; justify-content: space-between; align-items: center; margin: 0 4px 12px; }
+  .ap-head h2 { margin: 0; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .ap-close { border: 0; background: #f0f1f2; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 13px; color: var(--ink); }
+  .ap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .ap-card { display: flex; flex-direction: column; border: 1px solid #ececec; border-radius: 14px; overflow: hidden; transition: border-color .2s, box-shadow .2s, transform .2s; }
+  .ap-card:hover { border-color: #d9dadc; box-shadow: 0 14px 30px -20px rgba(0,0,0,.4); transform: translateY(-2px); }
+  .ap-main { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 16px; text-decoration: none; color: inherit; }
+  .ap-main img, .ap-blank { width: 52px; height: 52px; border-radius: 13px; margin-bottom: 6px; }
+  .ap-blank { display: grid; place-items: center; border: 2px dashed #b8babd; color: #9a9ca0; font-weight: 700; font-size: 22px; }
+  .ap-main b { font-size: 19px; line-height: 1.2; }
+  .ap-desc { color: var(--muted); font-size: 15px; line-height: 1.4; }
+  .ap-st { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .ap-st i { width: 7px; height: 7px; border-radius: 50%; background: #20a35a; } .ap-st.soon i { background: #e8590c; } .ap-st.lab i { background: #a3a5a8; }
+  .ap-acts { display: flex; border-top: 1px solid #ececec; }
+  .ap-acts a, .ap-acts button { flex: 1; padding: 11px 8px; text-align: center; font: 600 14px var(--ui); color: var(--ink); text-decoration: none; background: none; border: 0; cursor: pointer; }
+  .ap-acts > * + * { border-left: 1px solid #ececec; }
+  .ap-acts a:hover, .ap-acts button:hover { background: #f6f7f8; }
+  .ap-card.next .ap-main b { color: #4a4c50; }
+  /* phones: the panel becomes a bottom sheet */
+  @media (max-width: 700px) {
+    .apps-panel { position: fixed; top: auto; bottom: 0; left: 0; width: 100%; max-height: 86vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
+      transform: translateY(100%); transition: transform .32s cubic-bezier(.2,.8,.2,1), visibility 0s .32s; opacity: 1; }
+    .apps-panel.on { transform: translateY(0); transition: transform .32s cubic-bezier(.2,.8,.2,1); }
+    .grab { display: block; width: 40px; height: 5px; border-radius: 3px; background: #d4d5d7; margin: 2px auto 12px; }
+    .ap-grid { grid-template-columns: 1fr; gap: 10px; }
+    .ap-main { display: grid; grid-template-columns: 52px 1fr; column-gap: 14px; row-gap: 2px; padding: 14px; }
+    .ap-main img, .ap-blank { grid-row: 1 / span 3; margin: 0; }
+    .ap-desc { font-size: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .apps-panel, .apps-panel.on, .scrim { transition: none; } }
   .town { contain: layout paint; }
   @media (max-width: 600px) { .town { width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; } }
   .facts { max-width: 1240px; margin: 0 auto; padding: 30px 28px; display: flex; flex-wrap: wrap; gap: 18px 48px; justify-content: center; border-top: 1px solid #cfd0d3; }
@@ -81,7 +115,7 @@
 
 <header>
   <a class="brand" href="/" aria-label="Narne Labs home"><img src="/assets/img/kalki.svg" alt="" width="28" height="34">Narne Labs</a>
-  <nav><a href="#apps">Apps</a><a href="#studio">Studio</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
+  <nav><button class="navbtn" id="appsBtn" aria-expanded="false" aria-controls="appsPanel">Apps <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><a href="#studio">Studio</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
 </header>
 
 <section class="hero" id="apps">
@@ -99,11 +133,40 @@
   <noscript><p class="help">Turn on JavaScript to explore Narne Town, or pick an app below.</p></noscript>
 </section>
 
-<section class="applist" aria-label="Our apps">
-  <a href="/apps/compressyourvideo/"><img src="/apps/compressyourvideo/img/icon-512.png" alt="" width="44" height="44" loading="lazy"><span><b>CompressYourVideo</b><small>Live · Web and Android</small></span></a>
-  <a href="/apps/pradakshina/"><img src="/apps/pradakshina/img/icon-512.png" alt="" width="44" height="44" loading="lazy"><span><b>Pradakshina</b><small>Coming soon · Android</small></span></a>
-  <a href="mailto:hello@narnelabs.com?subject=Next%20app"><i aria-hidden="true">?</i><span><b>Next app</b><small>Under construction</small></span></a>
-</section>
+<div class="scrim" id="appsScrim" hidden></div>
+<div class="apps-panel" id="appsPanel" role="dialog" aria-modal="false" aria-labelledby="appsTitle" aria-hidden="true">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="ap-head"><h2 id="appsTitle">Our apps</h2><button class="ap-close" id="appsClose" aria-label="Close">✕</button></div>
+  <div class="ap-grid">
+    <article class="ap-card">
+      <a class="ap-main" href="/apps/compressyourvideo/">
+        <img src="/apps/compressyourvideo/img/icon-512.png" alt="" width="52" height="52">
+        <span class="ap-st live"><i></i>Live · Web and Android</span>
+        <b>CompressYourVideo</b>
+        <span class="ap-desc">Shrinks any video to fit WhatsApp, Discord, email and more, on your own device.</span>
+      </a>
+      <div class="ap-acts"><a href="/apps/compressyourvideo/">Open</a><button data-town="cyv">See in town</button></div>
+    </article>
+    <article class="ap-card">
+      <a class="ap-main" href="/apps/pradakshina/">
+        <img src="/apps/pradakshina/img/icon-512.png" alt="" width="52" height="52">
+        <span class="ap-st soon"><i></i>Coming soon · Android</span>
+        <b>Pradakshina</b>
+        <span class="ap-desc">Counts your rounds as you walk, with the phone in your pocket.</span>
+      </a>
+      <div class="ap-acts"><a href="/apps/pradakshina/">Open</a><button data-town="prd">See in town</button></div>
+    </article>
+    <article class="ap-card next">
+      <a class="ap-main" href="mailto:hello@narnelabs.com?subject=Next%20app">
+        <span class="ap-blank" aria-hidden="true">?</span>
+        <span class="ap-st lab"><i></i>Under construction</span>
+        <b>Next app</b>
+        <span class="ap-desc">Something new is being built. Got an everyday problem we should solve?</span>
+      </a>
+      <div class="ap-acts"><a href="mailto:hello@narnelabs.com?subject=Next%20app">Suggest an idea</a><button data-town="lab">See in town</button></div>
+    </article>
+  </div>
+</div>
 
 <section class="facts" id="studio">
   <div><b>2</b><span>apps out, more on the way</span></div>
@@ -538,6 +601,7 @@
     const a = document.getElementById('pa'); a.href = d.href; a.textContent = d.cta;
     panel.classList.add('on');
   }
+  window.narneTown = { visit: (id) => visit(id) };
   function home() { zoomTo(FULL); panel.classList.remove('on'); }
   svg.addEventListener('click', (e) => { const t = e.target.closest('[data-id]'); if (t) visit(t.dataset.id); });
   svg.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { const t = e.target.closest('[data-id]'); if (t) { e.preventDefault(); visit(t.dataset.id); } } if (e.key === 'Escape') home(); });
@@ -715,6 +779,34 @@
     running = true; let fake = performance.now(); for (let i = 0; i < 90; i++) { fake += 33; last = fake - 33; frame(fake); } running = false;
     zoomTo = (target) => { vb = [...target]; setVB(); drawPins(); };
   } else requestAnimationFrame(frame);
+})();
+</script>
+<script>
+(() => {
+  const btn = document.getElementById('appsBtn'), panel = document.getElementById('appsPanel'), scrim = document.getElementById('appsScrim');
+  const sheet = () => matchMedia('(max-width: 700px)').matches;
+  let open = false;
+  function set(v, focusBack = true) {
+    if (v === open) return; open = v;
+    btn.setAttribute('aria-expanded', v); panel.setAttribute('aria-hidden', !v); panel.classList.toggle('on', v);
+    if (v) { scrim.hidden = false; requestAnimationFrame(() => scrim.classList.add('on')); if (sheet()) document.body.style.overflow = 'hidden'; setTimeout(() => panel.querySelector('.ap-main').focus({ preventScroll: true }), 60); }
+    else { scrim.classList.remove('on'); setTimeout(() => { if (!open) scrim.hidden = true; }, 260); document.body.style.overflow = ''; if (focusBack) btn.focus({ preventScroll: true }); }
+  }
+  btn.addEventListener('click', () => set(!open));
+  document.getElementById('appsClose').addEventListener('click', () => set(false));
+  scrim.addEventListener('click', () => set(false, false));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) set(false); });
+  // "See in town": close the panel, bring the town into view, then zoom to that building
+  panel.querySelectorAll('[data-town]').forEach((b) => b.addEventListener('click', () => {
+    set(false, false);
+    document.getElementById('town').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(() => window.narneTown && window.narneTown.visit(b.dataset.town), 450);
+  }));
+  // swipe the sheet down to close it on phones
+  let y0 = null;
+  panel.addEventListener('touchstart', (e) => { if (sheet() && panel.scrollTop <= 0) y0 = e.touches[0].clientY; }, { passive: true });
+  panel.addEventListener('touchmove', (e) => { if (y0 !== null && e.touches[0].clientY - y0 > 70) { y0 = null; set(false, false); } }, { passive: true });
+  panel.addEventListener('touchend', () => (y0 = null));
 })();
 </script>
 </body>
