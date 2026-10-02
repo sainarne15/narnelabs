@@ -34,7 +34,7 @@
   .brand img { height: 34px; width: auto; }
   header nav { display: flex; gap: 26px; font-size: 16px; font-weight: 500; }
   header nav a { text-decoration: none; color: var(--muted); } header nav a:hover { color: var(--ink); }
-  @media (max-width: 600px) { header nav a:not(:last-child) { display: none; } }
+  @media (max-width: 600px) { header nav a[href="#studio"] { display: none; } }
 
   .hero { max-width: 1240px; margin: 0 auto; padding: 22px 28px 40px; text-align: center; }
   .hero h1 { margin: 0 auto; font-weight: 700; font-size: clamp(32px, 4.2vw, 54px); line-height: 1.05; letter-spacing: -.015em; }
@@ -61,7 +61,7 @@
   @media (max-width: 700px) { .panel { position: relative; left: auto; bottom: auto; margin: 12px auto 0; width: 100%; display: none; } .panel.on { display: block; } }
   .help { margin-top: 6px; color: var(--muted); font-size: 15px; }
 
-  .applist { max-width: 1240px; margin: 0 auto; padding: 0 28px 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .applist { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; } /* read by screen readers and search engines, not shown */
   .applist a { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: #fff; border-radius: 14px; text-decoration: none; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 10px 24px -18px rgba(0,0,0,.35); transition: transform .2s, box-shadow .2s; }
   .applist a:hover { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 16px 30px -18px rgba(0,0,0,.45); }
   .applist img, .applist i { width: 44px; height: 44px; border-radius: 11px; flex: none; }
