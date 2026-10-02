@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Pradakshina Counter: Parikrama · Narne Labs</title>
+  <meta name="description" content="Walk around the temple. Pradakshina keeps count. Counts your temple rounds as you walk, with temples nearby, panchangam and special days." />
+  <meta name="theme-color" content="#05060a" />
+  <link rel="canonical" href="https://narnelabs.com/apps/pradakshina/" />
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Narne Labs" />
+  <meta property="og:title" content="Pradakshina Counter: Parikrama · Narne Labs" />
+  <meta property="og:description" content="Walk around the temple. Pradakshina keeps count. Counts your temple rounds as you walk, with temples nearby, panchangam and special days." />
+  <meta property="og:image" content="https://narnelabs.com/apps/pradakshina/img/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-scene="lite" data-shape="3" class="theme-ember">
+  <canvas class="webgl" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><div class="cursor__ring"><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="nl-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b6cff" /><stop offset=".55" stop-color="#22d3ee" /><stop offset="1" stop-color="#ff4ecd" /></linearGradient><symbol id="logo-mark" viewBox="0 0 32 32"><rect x="1.5" y="1.5" width="29" height="29" rx="9" fill="#07080d" stroke="url(#nl-grad)" stroke-width="1.6" /><path d="M10.5 22V10l11 12V10" fill="none" stroke="url(#nl-grad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></symbol></defs></svg>
+
+  <header class="nav">
+    <a href="/" class="nav__brand" aria-label="Narne Labs home"><svg viewBox="0 0 32 32" width="30" height="30"><use href="#logo-mark" /></svg><span>Narne<b>Labs</b></span></a>
+    <nav class="nav__links" aria-label="Primary"><a href="/#apps">Apps</a><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a></nav>
+    <a href="/#contact" class="btn btn--small btn--glow" data-magnetic>Contact</a>
+    <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </header>
+  <div class="menu" aria-hidden="true"><nav><a href="/"><small>00</small>Home</a><a href="/apps/compressyourvideo/"><small>01</small>CompressYourVideo</a><a href="/apps/pradakshina/"><small>02</small>Pradakshina</a><a href="/privacy/"><small>03</small>Privacy</a><a href="/#contact"><small>04</small>Contact</a></nav></div>
+
+  <main class="page">
+    <div class="container">
+      <nav class="subnav" aria-label="Product">
+        <a href="/apps/pradakshina/" aria-current="page">Overview</a>
+        <a href="/apps/pradakshina/privacy/">Privacy policy</a>
+        <a href="/apps/pradakshina/delete/">Delete your data</a>
+        <a href="mailto:narnelns@gmail.com?subject=Pradakshina">Support</a>
+      </nav>
+      <section class="product-hero">
+        <div>
+          <div class="product-id">
+            <img src="/apps/pradakshina/img/icon-512.png" alt="Pradakshina app icon" width="64" height="64" />
+            <p class="mono">NL-002 · Android<b>Pradakshina Counter: Parikrama</b></p>
+          </div>
+          <h1 class="page__title" data-split>Walk around the temple. <em class="gradient-text">We keep count.</em></h1>
+          <p class="section__lede">Put the phone in your pocket and begin. Each round is counted as you come back to where you started, whatever the shape of the path. Stopping to face the deity, namaskar, prostrations and turning on the spot are not counted. At each round the phone gives a gentle tap, and it can say the count aloud in your language.</p>
+          <div class="chips">
+            <span class="chip chip--soon mono"><i></i>Coming soon to Google Play</span>
+            <span class="chip chip--plain mono"><i></i>Free · No ads</span>
+            <span class="chip chip--plain mono"><i></i>10 languages</span>
+          </div>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#features" data-magnetic>See what it does <span class="btn__arrow">↓</span></a>
+            <a class="btn btn--ghost" href="/apps/pradakshina/privacy/" data-magnetic>Privacy</a>
+          </div>
+        </div>
+        <div class="phone-stack" aria-hidden="true">
+          <img src="/apps/pradakshina/img/01-counting.webp" alt="" width="540" height="960" />
+          <img src="/apps/pradakshina/img/03-temples.webp" alt="" width="540" height="960" />
+          <img src="/apps/pradakshina/img/05-calendar.webp" alt="" width="540" height="960" />
+        </div>
+      </section>
+
+      <div class="stat-row">
+        <div class="stat"><b class="mono">4</b><span>counting modes: auto, tap, Somasutra and small circle</span></div>
+        <div class="stat"><b class="mono">60k+</b><span>temples on the offline map</span></div>
+        <div class="stat"><b class="mono">10</b><span>languages, including voice</span></div>
+        <div class="stat"><b class="mono">0</b><span>ads, and no account needed</span></div>
+      </div>
+
+      <section class="shots" aria-label="Screenshots">
+        <div class="shots__track">
+          <figure><img src="/apps/pradakshina/img/01-counting.webp" alt="The walk screen counting 15 of 21 rounds, walking clockwise" width="540" height="960" loading="lazy" decoding="async" /><figcaption>Every round, counted</figcaption></figure>
+          <figure><img src="/apps/pradakshina/img/02-complete.webp" alt="A finished walk of 11 rounds with a lit brass lamp, and buttons to share it or finish" width="540" height="960" loading="lazy" decoding="async" /><figcaption>A lamp for every walk</figcaption></figure>
+          <figure><img src="/apps/pradakshina/img/03-temples.webp" alt="A map of temples around Madurai marked with brass lamps, and Meenakshi Temple in the list" width="540" height="960" loading="lazy" decoding="async" /><figcaption>Temples near you</figcaption></figure>
+          <figure><img src="/apps/pradakshina/img/04-temple.webp" alt="Meenakshi Temple's page: photo, opening hours, a button to start a pradakshina, and its story" width="540" height="960" loading="lazy" decoding="async" /><figcaption>Every temple has a story</figcaption></figure>
+          <figure><img src="/apps/pradakshina/img/05-calendar.webp" alt="The October panchangam calendar with festival days marked, and the day card for Navaratri" width="540" height="960" loading="lazy" decoding="async" /><figcaption>Panchangam and special days</figcaption></figure>
+          <figure><img src="/apps/pradakshina/img/06-languages.webp" alt="The app language list: English, Hindi, Tamil, Telugu, Kannada, Malayalam, Marathi and more" width="540" height="960" loading="lazy" decoding="async" /><figcaption>In your language</figcaption></figure>
+        </div>
+      </section>
+
+      <section id="features" class="section-mini">
+        <p class="label mono"><span>Features</span></p>
+        <h2 class="section__title">Made for how people <em class="gradient-text">really walk.</em></h2>
+        <div class="split-feature">
+          <div class="feature"><span class="mono">01 · Counting</span><h3>Every round, counted</h3><ul>
+            <li>3, 11, 21, 108 or any number: set your rounds and it tells you when you're done</li>
+            <li>Somasutra pradakshina for Shiva temples, and small circles around a tree or tulsi</li>
+            <li>Tap mode when you want to count by hand</li>
+            <li>Keeps counting with the screen off</li></ul></div>
+          <div class="feature"><span class="mono">02 · Temples</span><h3>Temples near you</h3><ul>
+            <li>A map of temples, with a lamp lit at every temple you've walked at</li>
+            <li>Photos, opening hours, directions and the temple's story from Wikipedia</li>
+            <li>Add your own photos and suggest fixes to temple details</li></ul></div>
+          <div class="feature"><span class="mono">03 · Calendar</span><h3>Panchangam and special days</h3><ul>
+            <li>Tithi, nakshatra, yoga, karana, sunrise and sunset for where you are</li>
+            <li>Rahu kalam, Yamagandam, Gulika and Abhijit muhurta</li>
+            <li>Ekadashi, Pradosham, Sankashti, Amavasya, Purnima and festivals marked on the calendar</li>
+            <li>Reminders for the days that matter to you</li></ul></div>
+          <div class="feature"><span class="mono">04 · Journey</span><h3>Your journey</h3><ul>
+            <li>Every walk kept on your phone: rounds, temple, date</li>
+            <li>Lifetime rounds and the temples you've visited</li>
+            <li>Share a card of today's pradakshina with family</li></ul></div>
+          <div class="feature"><span class="mono">05 · Languages</span><h3>In your language</h3><p>English, हिन्दी, தமிழ், తెలుగు, ಕನ್ನಡ, മലയാളം, मराठी, ગુજરાતી, বাংলা, ଓଡ଼ିଆ</p></div>
+          <div class="feature"><span class="mono">06 · Privacy</span><h3>Private by default</h3><p>Everything works without an account, and your walks stay on your phone. Sign in only if you want a backup. You choose whether to share walks to help improve counting, and you can ask for your data to be deleted from Settings at any time.</p></div>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <h2 class="section__title">Questions, ideas or a <em class="gradient-text">miscounted round?</em></h2>
+        <p class="section__lede" style="margin-left:auto;margin-right:auto">We read every message. Tell us the temple and what happened and we'll look into it.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="mailto:narnelns@gmail.com?subject=Pradakshina" data-magnetic>narnelns@gmail.com</a>
+          <a class="btn btn--ghost" href="/apps/pradakshina/delete/" data-magnetic>Delete your data</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__bottom mono">
+      <span>© <span class="js-year">2026</span> Narne Labs</span>
+      <span><a href="/apps/compressyourvideo/">CompressYourVideo</a> · <a href="/apps/pradakshina/">Pradakshina</a> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="/assets/js/main.js" defer></script>
+  <script type="module" src="/assets/js/scene.js"></script>
+</body>
+</html>

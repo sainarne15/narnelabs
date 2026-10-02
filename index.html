@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Narne Labs — We make things possible</title>
+  <meta name="description" content="Narne Labs is an independent product studio building AI tools, utility apps and Android apps — including CompressYourVideo and Pradakshina Counter." />
+  <meta name="theme-color" content="#05060a" />
+  <link rel="canonical" href="https://narnelabs.com/" />
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/img/icon-512.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Narne Labs" />
+  <meta property="og:title" content="Narne Labs — We make things possible" />
+  <meta property="og:description" content="An independent studio building AI tools, utility apps and Android apps." />
+  <meta property="og:url" content="https://narnelabs.com/" />
+  <meta property="og:image" content="https://narnelabs.com/assets/img/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Narne Labs",
+    "url": "https://narnelabs.com",
+    "logo": "https://narnelabs.com/assets/img/icon-512.png",
+    "email": "hello@narnelabs.com",
+    "sameAs": ["https://compressyourvideo.com"]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-scene="full">
+
+  <!-- Boot / preloader -->
+  <div class="preloader" aria-hidden="true">
+    <div class="preloader__inner">
+      <div class="preloader__logo">
+        <svg viewBox="0 0 32 32" width="56" height="56"><use href="#logo-mark" /></svg>
+      </div>
+      <ul class="preloader__log mono">
+        <li>initializing particle field<span>ok</span></li>
+        <li>compiling shaders<span>ok</span></li>
+        <li>warming up neural mesh<span>ok</span></li>
+        <li>making things possible<span>…</span></li>
+      </ul>
+      <div class="preloader__bar"><i></i></div>
+      <div class="preloader__pct mono"><span>0</span>%</div>
+    </div>
+  </div>
+
+  <!-- 3D background -->
+  <canvas class="webgl" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Cursor -->
+  <div class="cursor" aria-hidden="true"><div class="cursor__ring"><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+
+  <!-- SVG sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="nl-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#8b6cff" />
+        <stop offset=".55" stop-color="#22d3ee" />
+        <stop offset="1" stop-color="#ff4ecd" />
+      </linearGradient>
+      <symbol id="logo-mark" viewBox="0 0 32 32">
+        <rect x="1.5" y="1.5" width="29" height="29" rx="9" fill="#07080d" stroke="url(#nl-grad)" stroke-width="1.6" />
+        <path d="M10.5 22V10l11 12V10" fill="none" stroke="url(#nl-grad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <a href="/" class="nav__brand" aria-label="Narne Labs home" data-cursor="Home">
+      <svg viewBox="0 0 32 32" width="30" height="30"><use href="#logo-mark" /></svg>
+      <span>Narne<b>Labs</b></span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#apps">Apps</a>
+      <a href="#build">What we build</a>
+      <a href="#manifesto">Manifesto</a>
+      <a href="#process">Process</a>
+    </nav>
+    <a href="#contact" class="btn btn--small btn--glow" data-magnetic>Contact</a>
+    <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <div class="menu" aria-hidden="true">
+    <nav>
+      <a href="#apps"><small>01</small>Apps</a>
+      <a href="#build"><small>02</small>What we build</a>
+      <a href="#manifesto"><small>03</small>Manifesto</a>
+      <a href="#process"><small>04</small>Process</a>
+      <a href="#contact"><small>05</small>Contact</a>
+    </nav>
+  </div>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero" data-shape="0">
+      <div class="hud hud--tl mono"><span class="pulse"></span>SYS.STATUS — ONLINE</div>
+      <div class="hud hud--tr mono">BUILD 2026.10 / NL-CORE</div>
+      <div class="hud hud--bl mono">PRODUCTS <b>02</b> &nbsp;·&nbsp; IN THE LAB <b>∞</b></div>
+      <div class="hud hud--br mono"><span class="js-coords">X 0.000 · Y 0.000</span></div>
+
+      <div class="hero__content container">
+        <p class="eyebrow mono reveal">Narne Labs — independent product studio</p>
+        <h1 class="hero__title" data-split>
+          <span class="line">We make</span>
+          <span class="line">things</span>
+          <span class="line"><em class="gradient-text">possible.</em></span>
+        </h1>
+        <p class="hero__sub reveal">
+          We're the studio behind a growing family of apps, from AI-powered tools to everyday utilities.
+          Fast, private and built for real people.
+        </p>
+        <p class="hero__now mono reveal">
+          <span class="dim">&gt; now_building:</span>
+          <span class="scramble" data-scramble="AI tools|utility apps|Android apps|web tools|the next big thing">AI tools</span><span class="caret">_</span>
+        </p>
+        <div class="hero__cta reveal">
+          <a href="#apps" class="btn btn--primary" data-magnetic data-cursor="Explore">Explore our apps <span class="btn__arrow">→</span></a>
+          <a href="#contact" class="btn btn--ghost" data-magnetic>Say hello</a>
+        </div>
+      </div>
+
+      <a href="#apps" class="scroll-cue mono" aria-label="Scroll to apps">
+        <span>scroll</span><i></i>
+      </a>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Artificial Intelligence</span><b>✦</b><span>Utility Apps</span><b>✦</b><span>Android</span><b>✦</b><span>Web Tools</span><b>✦</b><span>Privacy-first</span><b>✦</b><span>Built for everyone</span><b>✦</b>
+        <span>Artificial Intelligence</span><b>✦</b><span>Utility Apps</span><b>✦</b><span>Android</span><b>✦</b><span>Web Tools</span><b>✦</b><span>Privacy-first</span><b>✦</b><span>Built for everyone</span><b>✦</b>
+      </div>
+    </div>
+
+    <!-- APPS -->
+    <section id="apps" class="section" data-shape="1">
+      <div class="container">
+        <div class="section__head">
+          <p class="label mono reveal"><span>[01]</span> The family</p>
+          <h2 class="section__title" data-split>Products from <em class="gradient-text">the lab.</em></h2>
+          <p class="section__lede reveal">Each Narne Labs app solves one problem and solves it well. Here's what we've shipped so far, with more on the way.</p>
+        </div>
+
+        <div class="apps">
+          <!-- CompressYourVideo -->
+          <article class="card card--app reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <div class="card__top">
+              <span class="chip chip--live mono"><i></i>Live · Web + Android</span>
+              <span class="card__idx mono">NL-001</span>
+            </div>
+            <div class="viz viz--compress" aria-hidden="true">
+              <div class="viz-file">
+                <div class="viz-file__row mono"><span>holiday_4k.mov</span><span class="js-size">248.0 MB</span></div>
+                <div class="viz-file__bar"><i></i></div>
+                <div class="viz-file__row mono dim"><span>target · WhatsApp</span><span>≤ 16 MB</span></div>
+              </div>
+              <div class="viz-chips mono"><span>MP4</span><span>MOV</span><span>MKV</span><span>WebM</span></div>
+            </div>
+            <h3 class="card__title">CompressYourVideo</h3>
+            <p class="card__text">Shrink any video to fit WhatsApp, Discord, Gmail and more. Compression runs <b>entirely on your device</b>, in your browser or fully offline on Android, so nothing is uploaded. It's free, with no watermark.</p>
+            <ul class="card__stats mono">
+              <li><b>11</b> presets</li>
+              <li><b>2 GB</b> max file</li>
+              <li><b>0</b> uploads</li>
+            </ul>
+            <div class="card__actions">
+              <a class="btn btn--small btn--primary" href="/apps/compressyourvideo/" data-cursor="View">Explore →</a>
+              <a class="btn btn--small btn--ghost" href="https://compressyourvideo.com" target="_blank" rel="noopener" data-cursor="Open">Web app ↗</a>
+              <a class="btn btn--small btn--ghost" href="https://play.google.com/store/apps/details?id=com.compressyourvideo" target="_blank" rel="noopener" data-cursor="Play">Google Play ↗</a>
+            </div>
+          </article>
+
+          <!-- Pradakshina Counter -->
+          <article class="card card--app reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <div class="card__top">
+              <span class="chip chip--soon mono"><i></i>Coming soon · Google Play</span>
+              <span class="card__idx mono">NL-002</span>
+            </div>
+            <div class="viz viz--orbit" aria-hidden="true">
+              <div class="orbit">
+                <div class="orbit__ring"></div>
+                <div class="orbit__ring orbit__ring--2"></div>
+                <div class="orbit__runner"><i></i></div>
+                <div class="orbit__core mono"><b class="js-rounds">0</b><small>/ 108</small></div>
+              </div>
+            </div>
+            <h3 class="card__title">Pradakshina</h3>
+            <p class="card__text">Walk around the temple and Pradakshina keeps count. Put the phone in your pocket and <b>every round is counted automatically</b>. It also has temples near you, a panchangam and special days.</p>
+            <ul class="card__stats mono">
+              <li><b>Auto</b> counting</li>
+              <li><b>60k+</b> temples</li>
+              <li><b>10</b> languages</li>
+            </ul>
+            <div class="card__actions">
+              <a class="btn btn--small btn--primary" href="/apps/pradakshina/" data-cursor="View">Explore →</a>
+              <a class="btn btn--small btn--ghost" href="/apps/pradakshina/privacy/">Privacy</a>
+            </div>
+          </article>
+
+          <!-- Lab / next -->
+          <article class="card card--lab reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <div class="card__top">
+              <span class="chip chip--lab mono"><i></i>In development</span>
+              <span class="card__idx mono">NL-003</span>
+            </div>
+            <div class="terminal mono" aria-hidden="true">
+              <div class="terminal__bar"><i></i><i></i><i></i><span>lab ~ narne</span></div>
+              <pre class="terminal__body js-terminal"></pre>
+            </div>
+            <h3 class="card__title glitch" data-text="Next experiment">Next experiment</h3>
+            <p class="card__text">Something new is compiling in the lab. AI, utility, or something in between? Drop us a line and you'll hear about it first.</p>
+            <div class="card__actions">
+              <a class="btn btn--small btn--ghost" href="#contact" data-cursor="Ping">Get notified →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT WE BUILD -->
+    <section id="build" class="section" data-shape="2">
+      <div class="container">
+        <div class="section__head">
+          <p class="label mono reveal"><span>[02]</span> Capabilities</p>
+          <h2 class="section__title" data-split>From AI to <em class="gradient-text">everyday utility.</em></h2>
+        </div>
+
+        <div class="caps">
+          <div class="cap reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <svg class="cap__icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="6" class="s-grad pulse-svg" />
+              <g class="spin-slow"><circle cx="24" cy="24" r="16" class="s-dim" stroke-dasharray="3 5" />
+              <circle cx="40" cy="24" r="2.5" class="f-grad" /><circle cx="8" cy="24" r="2.5" class="f-grad" /><circle cx="24" cy="8" r="2.5" class="f-grad" /></g>
+              <path d="M24 18V10M24 30v8M18 24h-8M30 24h8" class="s-dim" />
+            </svg>
+            <p class="cap__num mono">01</p>
+            <h3>Artificial Intelligence</h3>
+            <p>Models that do real work, like understanding media, text and intent. They run on your device wherever they can.</p>
+          </div>
+          <div class="cap reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <svg class="cap__icon" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="9" y="9" width="30" height="30" rx="8" class="s-grad" />
+              <path d="M17 24h14M24 17v14" class="s-grad spin-slow" />
+            </svg>
+            <p class="cap__num mono">02</p>
+            <h3>Utility apps</h3>
+            <p>Small tools that solve one problem perfectly, without bloat or dark patterns.</p>
+          </div>
+          <div class="cap reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <svg class="cap__icon" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="14" y="5" width="20" height="38" rx="5" class="s-grad" />
+              <path d="M21 37h6" class="s-dim" />
+              <path d="M19 16h10M19 21h10M19 26h6" class="s-dim blink-lines" />
+            </svg>
+            <p class="cap__num mono">03</p>
+            <h3>Mobile</h3>
+            <p>Android apps that feel native and run smoothly on every phone, from budget models to flagships.</p>
+          </div>
+          <div class="cap reveal-card" data-tilt>
+            <div class="card__glow"></div>
+            <svg class="cap__icon" viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="24" r="16" class="s-grad" />
+              <ellipse cx="24" cy="24" rx="7" ry="16" class="s-dim spin-y" />
+              <path d="M8 24h32M11 16h26M11 32h26" class="s-dim" />
+            </svg>
+            <p class="cap__num mono">04</p>
+            <h3>Web tools</h3>
+            <p>Instant tools that open in your browser with nothing to install. Your data stays on your device.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section id="manifesto" class="section manifesto" data-shape="3">
+      <div class="container">
+        <p class="label mono"><span>[03]</span> Manifesto</p>
+        <p class="manifesto__text" data-words>
+          Software should feel like magic and behave like a good friend. It should be fast when you need it and quiet when you don't, and it should never sell you out.
+          Every Narne Labs product is built privacy-first, runs on your device whenever possible, and stays free of clutter.
+        </p>
+
+        <div class="stats">
+          <div class="stat"><b class="mono" data-count="100">0</b><span>% on-device video compression</span></div>
+          <div class="stat"><b class="mono" data-count="0">0</b><span>bytes of your video uploaded</span></div>
+          <div class="stat"><b class="mono" data-count="2">0</b><span>apps live or launching</span></div>
+          <div class="stat"><b class="mono">∞</b><span>ideas in the lab</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS (horizontal) -->
+    <section id="process" class="process" data-shape="3">
+      <div class="process__pin">
+        <div class="container process__head">
+          <p class="label mono"><span>[04]</span> Process</p>
+          <h2 class="section__title">How an idea<br />becomes <em class="gradient-text">an app.</em></h2>
+        </div>
+        <div class="process__track">
+          <div class="step"><span class="step__n mono">01</span><h3>Spark</h3><p>Every app starts with something that annoyed us: a real problem real people have.</p><div class="step__line"></div></div>
+          <div class="step"><span class="step__n mono">02</span><h3>Prototype</h3><p>We build the smallest version that could work, then put it in people's hands right away.</p><div class="step__line"></div></div>
+          <div class="step"><span class="step__n mono">03</span><h3>Engineer</h3><p>We make it fast, private and reliable. If it can run on your device, it does.</p><div class="step__line"></div></div>
+          <div class="step"><span class="step__n mono">04</span><h3>Launch</h3><p>It ships on the web, on Google Play, or both, and it's free whenever we can manage it.</p><div class="step__line"></div></div>
+          <div class="step"><span class="step__n mono">05</span><h3>Evolve</h3><p>We listen, iterate and improve. A product is never really finished.</p><div class="step__line"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact" data-shape="4">
+      <div class="container contact__inner">
+        <p class="label mono reveal"><span>[05]</span> Contact</p>
+        <h2 class="contact__title" data-split>Have an idea? <br /><em class="gradient-text">Let's make it possible.</em></h2>
+        <p class="section__lede reveal">Partnerships, feedback, press or a bug in one of our apps: we read every message.</p>
+        <div class="contact__mail reveal">
+          <a href="mailto:hello@narnelabs.com" class="mail-link" data-cursor="Email">hello@narnelabs.com</a>
+          <button class="btn btn--small btn--ghost js-copy" data-copy="hello@narnelabs.com" data-magnetic>Copy</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <svg viewBox="0 0 32 32" width="34" height="34"><use href="#logo-mark" /></svg>
+        <div>
+          <b>Narne Labs</b>
+          <p class="dim">We make things possible.</p>
+        </div>
+      </div>
+      <div class="footer__cols">
+        <div>
+          <h4 class="mono">Apps</h4>
+          <a href="/apps/compressyourvideo/">CompressYourVideo</a>
+          <a href="/apps/pradakshina/">Pradakshina</a>
+        </div>
+        <div>
+          <h4 class="mono">Company</h4>
+          <a href="#manifesto">Manifesto</a>
+          <a href="mailto:hello@narnelabs.com">Contact</a>
+        </div>
+        <div>
+          <h4 class="mono">Legal</h4>
+          <a href="/privacy/">Privacy Policy</a>
+          <a href="/terms/">Terms of Use</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer__bottom mono">
+      <span>© <span class="js-year">2026</span> Narne Labs</span>
+      <span><span class="pulse"></span> Local time <span class="js-clock">--:--:--</span></span>
+      <a href="#top" class="to-top">Back to top ↑</a>
+    </div>
+    <div class="footer__giant" aria-hidden="true">NARNE LABS</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="/assets/js/main.js" defer></script>
+  <script type="module" src="/assets/js/scene.js"></script>
+</body>
+</html>

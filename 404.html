@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Lost in space · Narne Labs</title>
+  <meta name="description" content="Page not found." />
+  <meta name="theme-color" content="#05060a" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Narne Labs" />
+  <meta property="og:title" content="Lost in space · Narne Labs" />
+  <meta property="og:description" content="Page not found." />
+  <meta property="og:image" content="https://narnelabs.com/assets/img/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body data-scene="lite" data-shape="0">
+  <canvas class="webgl" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><div class="cursor__ring"><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="nl-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b6cff" /><stop offset=".55" stop-color="#22d3ee" /><stop offset="1" stop-color="#ff4ecd" /></linearGradient><symbol id="logo-mark" viewBox="0 0 32 32"><rect x="1.5" y="1.5" width="29" height="29" rx="9" fill="#07080d" stroke="url(#nl-grad)" stroke-width="1.6" /><path d="M10.5 22V10l11 12V10" fill="none" stroke="url(#nl-grad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></symbol></defs></svg>
+
+  <header class="nav">
+    <a href="/" class="nav__brand" aria-label="Narne Labs home"><svg viewBox="0 0 32 32" width="30" height="30"><use href="#logo-mark" /></svg><span>Narne<b>Labs</b></span></a>
+    <nav class="nav__links" aria-label="Primary"><a href="/#apps">Apps</a><a href="/apps/compressyourvideo/">CompressYourVideo</a><a href="/apps/pradakshina/">Pradakshina</a></nav>
+    <a href="/#contact" class="btn btn--small btn--glow" data-magnetic>Contact</a>
+    <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </header>
+  <div class="menu" aria-hidden="true"><nav><a href="/"><small>00</small>Home</a><a href="/apps/compressyourvideo/"><small>01</small>CompressYourVideo</a><a href="/apps/pradakshina/"><small>02</small>Pradakshina</a><a href="/privacy/"><small>03</small>Privacy</a><a href="/#contact"><small>04</small>Contact</a></nav></div>
+
+  <main class="page">
+    <div class="container">
+      <header class="page__hero">
+        <p class="label mono"><span>Error 404</span></p>
+        <h1 class="page__title" data-split>Lost in <em class="gradient-text">space.</em></h1>
+        <p class="page__meta mono">signal_lost: the page you asked for has drifted out of orbit.</p>
+      </header>
+      <div class="hero__cta"><a href="/" class="btn btn--primary" data-magnetic>Return to base →</a><a href="/#apps" class="btn btn--ghost" data-magnetic>See our apps</a></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__bottom mono">
+      <span>© <span class="js-year">2026</span> Narne Labs</span>
+      <span><a href="/apps/compressyourvideo/">CompressYourVideo</a> · <a href="/apps/pradakshina/">Pradakshina</a> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="/assets/js/main.js" defer></script>
+  <script type="module" src="/assets/js/scene.js"></script>
+</body>
+</html>
