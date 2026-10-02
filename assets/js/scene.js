@@ -2,7 +2,7 @@
    Narne Labs — WebGL scene
    An iridescent noise-displaced orb with orbit rings, plus a GPU particle
    field that morphs between five formations as the visitor scrolls:
-     0 galaxy · 1 wave terrain · 2 torus knot · 3 planet + ring · 4 Kalki brand mark
+     0 galaxy · 1 wave terrain · 2 torus knot · 3 planet + ring · 4 ring
    ========================================================================== */
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
 
@@ -282,26 +282,6 @@ function init() {
   pGeo.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
   pGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 30);
 
-  // 4 (brand): once the Kalki mark loads, resample formation 4 from its silhouette; the N above stays as fallback
-  if (mode === 'full') {
-    const img = new Image();
-    img.onload = () => {
-      const H = 240, Wd = Math.round(H * (img.naturalWidth / img.naturalHeight || 0.82));
-      const c = document.createElement('canvas'); c.width = Wd; c.height = H;
-      const g = c.getContext('2d'); g.drawImage(img, 0, 0, Wd, H);
-      const data = g.getImageData(0, 0, Wd, H).data;
-      const pts = [];
-      for (let y = 0; y < H; y++) for (let x = 0; x < Wd; x++) if (data[(y * Wd + x) * 4 + 3] > 128) pts.push(x, y);
-      if (!pts.length) return;
-      const n = pts.length / 2, k = (isMobile ? 5 : 5.8) / H;
-      for (let i = 0; i < COUNT; i++) {
-        const j = Math.floor(Math.random() * n) * 2;
-        set(shapes[4], i, (pts[j] - Wd / 2 + Math.random()) * k, -(pts[j + 1] - H / 2 + Math.random()) * k, gauss() * 0.1);
-      }
-      pGeo.attributes.aP4.needsUpdate = true;
-    };
-    img.src = '/assets/img/kalki.svg';
-  }
 
   const pUniforms = {
     uTime: { value: 0 }, uMorph: { value: 0 }, uPixelRatio: { value: DPR },
