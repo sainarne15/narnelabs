@@ -60,6 +60,8 @@ Use a local server rather than opening the file directly, because the site uses 
 
 Every later `git push` to `main` redeploys within about a minute.
 
+**Before every push, run `python tools/bust.py`.** It stamps a fresh `?v=` version on every local image, stylesheet and script URL. Cloudflare tells browsers to keep static files for hours, so without this, visitors keep seeing old images and styles after an update.
+
 ## URLs for Google Play Console
 
 | App | Field | URL |

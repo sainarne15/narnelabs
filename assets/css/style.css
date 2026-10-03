@@ -228,7 +228,7 @@ main, .page, .footer { overflow-x: clip; } /* no sideways scroll on phones */
 }
 .menu-open .menu { opacity: 1; visibility: visible; }
 .menu nav { display: flex; flex-direction: column; gap: 6px; }
-.menu a { font-family: var(--font-display); font-size: clamp(32px, 9vw, 56px); line-height: 1.15; transform: translateY(20px); opacity: 0; transition: transform .6s var(--ease), opacity .6s; }
+.menu a { font-family: var(--font-display); font-size: clamp(21px, 6.3vw, 56px); line-height: 1.25; overflow-wrap: anywhere; transform: translateY(20px); opacity: 0; transition: transform .6s var(--ease), opacity .6s; }
 .menu a small { font: 12px var(--font-mono); color: var(--dim); margin-right: 14px; vertical-align: super; }
 .menu-open .menu a { transform: none; opacity: 1; }
 .menu-open .menu a:nth-child(2) { transition-delay: .05s; }

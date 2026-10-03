@@ -7,9 +7,9 @@
 <meta name="description" content="Narne Labs is an independent studio building apps for everyday problems, including CompressYourVideo and Pradakshina.">
 <meta name="theme-color" content="#e6e7e9">
 <link rel="canonical" href="https://narnelabs.com/">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/assets/img/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+<link rel="icon" href="/assets/img/favicon.svg?v=202610031222" type="image/svg+xml">
+<link rel="icon" href="/assets/img/favicon-32.png?v=202610031222" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/icon-180.png?v=202610031222">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Narne Labs">
 <meta property="og:title" content="Narne Labs: We make things possible">
@@ -106,6 +106,13 @@
   @media (max-width: 600px) { .town { width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; } }
   .facts { max-width: 1240px; margin: 0 auto; padding: 30px 28px; display: flex; flex-wrap: wrap; gap: 18px 48px; justify-content: center; border-top: 1px solid #cfd0d3; }
   .facts div { text-align: center; } .facts b { display: block; font-size: 30px; line-height: 1.1; } .facts span { color: var(--muted); font-size: 15px; }
+  @media (max-width: 600px) {
+    .hero { padding-bottom: 28px; } .hero > p { font-size: 16.5px; }
+    .facts { flex-wrap: nowrap; gap: 0; padding: 18px 20px; justify-content: space-around; }
+    .facts div { flex: 1; } .facts b { font-size: 22px; } .facts span { display: block; font-size: 12.5px; line-height: 1.35; max-width: 16ch; margin: 2px auto 0; }
+    footer { padding: 18px 20px 28px; font-size: 13.5px; gap: 10px; } footer nav { gap: 14px; }
+  }
+  @media (hover: none) { .help .click { display: none; } } @media (hover: hover) { .help .tap { display: none; } }
   footer { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; color: var(--muted); font-size: 15px; border-top: 1px solid #cfd0d3; }
   footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
   footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
@@ -114,7 +121,7 @@
 <body>
 
 <header>
-  <a class="brand" href="/" aria-label="Narne Labs home"><img src="/assets/img/kalki.svg" alt="" width="28" height="34">Narne Labs</a>
+  <a class="brand" href="/" aria-label="Narne Labs home"><img src="/assets/img/kalki.svg?v=202610031222" alt="" width="28" height="34">Narne Labs</a>
   <nav><button class="navbtn" id="appsBtn" aria-expanded="false" aria-controls="appsPanel">Apps <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><a href="#studio">Studio</a><a href="mailto:hello@narnelabs.com">Contact</a></nav>
 </header>
 
@@ -129,7 +136,7 @@
       <div class="acts"><a id="pa" href="#">Open</a><button id="back">← Back to town</button></div>
     </div>
   </div>
-  <p class="help">Click a building to visit it.</p>
+  <p class="help"><span class="click">Click</span><span class="tap">Tap</span> a building to visit it.</p>
   <noscript><p class="help">Turn on JavaScript to explore Narne Town, or pick an app below.</p></noscript>
 </section>
 
@@ -140,7 +147,7 @@
   <div class="ap-grid">
     <article class="ap-card">
       <a class="ap-main" href="/apps/compressyourvideo/">
-        <img src="/apps/compressyourvideo/img/icon-512.png" alt="" width="52" height="52">
+        <img src="/apps/compressyourvideo/img/icon-512.png?v=202610031222" alt="" width="52" height="52">
         <span class="ap-st live"><i></i>Live · Web and Android</span>
         <b>CompressYourVideo</b>
         <span class="ap-desc">Shrinks any video to fit WhatsApp, Discord, email and more, on your own device.</span>
@@ -149,7 +156,7 @@
     </article>
     <article class="ap-card">
       <a class="ap-main" href="/apps/pradakshina/">
-        <img src="/apps/pradakshina/img/icon-512.png" alt="" width="52" height="52">
+        <img src="/apps/pradakshina/img/icon-512.png?v=202610031222" alt="" width="52" height="52">
         <span class="ap-st soon"><i></i>Coming soon · Android</span>
         <b>Pradakshina</b>
         <span class="ap-desc">Counts your rounds as you walk, with the phone in your pocket.</span>
