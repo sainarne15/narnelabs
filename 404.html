@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script>
+    // A Pradakshina profile link (narnelabs.com/u/<code>) the app didn't open: show its page.
+    (function () { var m = location.pathname.match(/^\/u\/([a-hj-km-np-z2-9]{7})\/?$/); if (m) location.replace('/u/?c=' + m[1]); })();
+  </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Lost in space · Narne Labs</title>

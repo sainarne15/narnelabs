@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["78VD7GL8G2.app.pradakshina"],
+        "components": [{ "/": "/u/*", "comment": "A Pradakshina Counter profile link" }]
+      }
+    ]
+  }
+}

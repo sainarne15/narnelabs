@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>A devotee's profile · Pradakshina Counter</title>
+  <meta name="description" content="Open this devotee's profile in Pradakshina Counter." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#1C0906" />
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; margin: 0; }
+    body { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #FFF4E8;
+      background: radial-gradient(120% 60% at 50% 0%, rgba(255,138,61,.28), transparent 60%), linear-gradient(180deg, #3A160B, #1C0906 40%, #0B0402); }
+    main { width: 100%; max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: 14px; }
+    .lamp { font-size: 0; margin: 0 auto 6px; width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center; background: rgba(255,199,102,.14); border: 1px solid rgba(255,199,102,.3); }
+    h1 { font-size: 26px; line-height: 1.2; letter-spacing: -.3px; }
+    p { color: rgba(255,236,218,.7); line-height: 1.5; font-size: 15px; }
+    .btn { display: block; padding: 15px 18px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; }
+    .primary { color: #2B0E04; background: linear-gradient(135deg, #FFC766, #FF8C3F 55%, #EF5A2E); }
+    .ghost { color: #FFF4E8; background: rgba(255,255,255,.08); border: 1px solid rgba(255,214,180,.15); }
+    .small { font-size: 13px; color: rgba(255,236,218,.5); }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="lamp" aria-hidden="true"><svg width="40" height="36" viewBox="0 -4 42 38"><path d="M3.5 17.2 C3.5 23.6 9 27.4 15.6 27.4 C21.2 27.4 25.6 24.6 27.6 20.2 L30 17.6 C30.4 17.2 30.1 16.6 29.5 16.7 L25.4 17.4 C23.4 16.6 19.8 16.2 15.6 16.2 C9.8 16.2 3.5 16.6 3.5 17.2 Z" fill="#FFB52E"/><path d="M27.6 1.6 C31.4 6.6 32.6 9.8 32.2 12.4 C31.8 15 29.8 16.2 27.6 16.2 C25.4 16.2 23.4 15 23 12.4 C22.6 9.8 23.8 6.6 27.6 1.6 Z" fill="#FF8C3F"/></svg></div>
+    <h1 id="title">A devotee's profile</h1>
+    <p id="text">Open it in Pradakshina Counter to see their title, rounds and badges.</p>
+    <a id="open" class="btn primary hidden" href="#">Open in the app</a>
+    <a class="btn ghost" href="https://play.google.com/store/apps/details?id=app.pradakshina">Get it on Google Play</a>
+    <a class="btn ghost" href="https://apps.apple.com/app/id6818906398">Download on the App Store</a>
+    <p class="small"><a href="/apps/pradakshina/" style="color:inherit">About Pradakshina Counter</a></p>
+  </main>
+  <script>
+    // Only a real profile code goes into the app link; anything else just shows the store buttons.
+    (function () {
+      var m = location.pathname.match(/^\/u\/([a-hj-km-np-z2-9]{7})\/?$/) || location.search.match(/[?&]c=([a-hj-km-np-z2-9]{7})(?:&|$)/);
+      if (!m) {
+        document.getElementById('title').textContent = 'Pradakshina Counter';
+        document.getElementById('text').textContent = 'This profile link is not complete. Ask for the link again, or scan their profile code in the app.';
+        return;
+      }
+      var open = document.getElementById('open');
+      open.href = 'pradakshina://u/' + m[1];
+      open.classList.remove('hidden');
+    })();
+  </script>
+</body>
+</html>
