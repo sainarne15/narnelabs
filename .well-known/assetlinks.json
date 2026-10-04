@@ -1,10 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "app.pradakshina",
       "sha256_cert_fingerprints": [
+        "99:8C:55:08:F0:85:1F:94:4D:AD:89:7A:94:C6:71:6F:C6:3B:CF:D9:87:34:53:3E:45:4A:9F:64:0E:3E:27:61",
         "77:F0:D0:B0:75:1A:16:4C:49:11:65:6E:F8:72:13:12:D0:86:FD:77:D2:AF:C4:CA:F1:A2:FA:41:1B:96:44:66"
       ]
     }
