@@ -8,44 +8,105 @@
   <meta name="robots" content="noindex" />
   <meta name="theme-color" content="#1C0906" />
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; margin: 0; }
-    body { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #FFF4E8;
-      background: radial-gradient(120% 60% at 50% 0%, rgba(255,138,61,.28), transparent 60%), linear-gradient(180deg, #3A160B, #1C0906 40%, #0B0402); }
-    main { width: 100%; max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: 14px; }
-    .lamp { font-size: 0; margin: 0 auto 6px; width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center; background: rgba(255,199,102,.14); border: 1px solid rgba(255,199,102,.3); }
-    h1 { font-size: 26px; line-height: 1.2; letter-spacing: -.3px; }
-    p { color: rgba(255,236,218,.7); line-height: 1.5; font-size: 15px; }
-    .btn { display: block; padding: 15px 18px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none; }
-    .primary { color: #2B0E04; background: linear-gradient(135deg, #FFC766, #FF8C3F 55%, #EF5A2E); }
-    .ghost { color: #FFF4E8; background: rgba(255,255,255,.08); border: 1px solid rgba(255,214,180,.15); }
-    .small { font-size: 13px; color: rgba(255,236,218,.5); }
-    .hidden { display: none; }
+    body { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 32px 16px calc(32px + env(safe-area-inset-bottom));
+      font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', sans-serif; color: #FFF4E8;
+      background: radial-gradient(120% 60% at 50% 0%, rgba(255, 138, 61, .28), transparent 60%), linear-gradient(180deg, #3A160B, #1C0906 40%, #0B0402); }
+    main { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .icon { width: 88px; height: 88px; border-radius: 22px; box-shadow: 0 16px 44px -10px rgba(255, 140, 63, .55); }
+    .app { margin-top: 14px; font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 236, 218, .55); }
+    h1 { margin-top: 10px; font-weight: 800; font-size: 30px; line-height: 1.15; letter-spacing: -.5px; }
+    p { margin-top: 10px; font-weight: 500; font-size: 16px; line-height: 1.5; color: rgba(255, 236, 218, .7); }
+    .code { margin-top: 18px; display: inline-flex; gap: 8px; align-items: center; padding: 8px 14px; border-radius: 999px;
+      background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 214, 180, .13); font-size: 14px; color: rgba(255, 236, 218, .62); }
+    .code b { font-weight: 700; letter-spacing: .12em; color: #FFF4E8; }
+    .open { margin-top: 28px; width: 100%; height: 56px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 17px; text-decoration: none; color: #2B0E04; background: linear-gradient(135deg, #FFC766, #FF8C3F 55%, #EF5A2E);
+      box-shadow: 0 10px 30px rgba(255, 138, 61, .35); }
+    .stores { margin-top: 28px; width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .open + .stores { margin-top: 14px; }
+    .stores.one { grid-template-columns: 1fr; max-width: 240px; }
+    .badge { display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 12px; border-radius: 14px;
+      background: #000; color: #fff; text-decoration: none; border: 1px solid rgba(255, 255, 255, .28); }
+    .badge svg { flex: none; width: 24px; height: 24px; }
+    .badge span { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; min-width: 0; }
+    .badge small { font-size: 10px; letter-spacing: .02em; opacity: .85; white-space: nowrap; }
+    .badge b { font-size: 17px; font-weight: 600; white-space: nowrap; }
+    .note { margin-top: 14px; font-size: 14px; color: rgba(255, 236, 218, .62); }
+    .note a { color: #FFA24C; font-weight: 700; text-decoration: none; }
+    .about { margin-top: 32px; font-size: 14px; }
+    .about a { color: rgba(255, 236, 218, .55); }
+    .hidden { display: none !important; }
+    @media (max-width: 360px) { .badge { gap: 8px; padding: 0 8px; } .badge b { font-size: 15px; } .badge small { font-size: 9px; } h1 { font-size: 26px; } }
   </style>
 </head>
 <body>
   <main>
-    <div class="lamp" aria-hidden="true"><svg width="40" height="36" viewBox="0 -4 42 38"><path d="M3.5 17.2 C3.5 23.6 9 27.4 15.6 27.4 C21.2 27.4 25.6 24.6 27.6 20.2 L30 17.6 C30.4 17.2 30.1 16.6 29.5 16.7 L25.4 17.4 C23.4 16.6 19.8 16.2 15.6 16.2 C9.8 16.2 3.5 16.6 3.5 17.2 Z" fill="#FFB52E"/><path d="M27.6 1.6 C31.4 6.6 32.6 9.8 32.2 12.4 C31.8 15 29.8 16.2 27.6 16.2 C25.4 16.2 23.4 15 23 12.4 C22.6 9.8 23.8 6.6 27.6 1.6 Z" fill="#FF8C3F"/></svg></div>
+    <img class="icon" src="/apps/pradakshina/img/icon-512.png" alt="" width="88" height="88" />
+    <div class="app">Pradakshina Counter</div>
     <h1 id="title">A devotee's profile</h1>
-    <p id="text">Open it in Pradakshina Counter to see their title, rounds and badges.</p>
-    <a id="open" class="btn primary hidden" href="#">Open in the app</a>
-    <a class="btn ghost" href="https://play.google.com/store/apps/details?id=app.pradakshina">Get it on Google Play</a>
-    <a class="btn ghost" href="https://apps.apple.com/app/id6818906398">Download on the App Store</a>
-    <p class="small"><a href="/apps/pradakshina/" style="color:inherit">About Pradakshina Counter</a></p>
+    <p id="text">See their title, rounds and badges, and add them as a friend, in the app.</p>
+    <div id="code" class="code hidden">Profile code <b id="codeValue"></b></div>
+
+    <a id="open" class="open hidden" href="#">Open in Pradakshina</a>
+    <div id="stores" class="stores">
+      <a id="play" class="badge" href="https://play.google.com/store/apps/details?id=app.pradakshina" aria-label="Get it on Google Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 2.2c-.27.28-.43.72-.43 1.29v17.02c0 .57.16 1.01.43 1.29l.07.07 9.53-9.53v-.22L3.67 2.13z"/><path fill="#FBBC04" d="M16.38 15.53 13.2 12.35v-.22l3.18-3.18.07.04 3.77 2.14c1.08.61 1.08 1.61 0 2.22l-3.77 2.14z"/><path fill="#EA4335" d="m16.45 15.49-3.25-3.25-9.6 9.6c.36.38.94.42 1.6.05l11.25-6.4"/><path fill="#4285F4" d="M16.45 8.99 5.2 2.6c-.66-.38-1.24-.33-1.6.05l9.6 9.59z"/></svg><span><small>GET IT ON</small><b>Google Play</b></span></a>
+      <a id="apple" class="badge" href="https://apps.apple.com/app/id6818906398" aria-label="Download on the App Store"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.77-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.1 1.76-.96 2.8 1.01.08 2.05-.52 2.68-1.28z"/></svg><span><small>Download on the</small><b>App Store</b></span></a>
+    </div>
+    <p id="iosNote" class="note hidden">Already have the app? <a id="iosOpen" href="#">Open the profile</a></p>
+    <p id="missing" class="note hidden">Pradakshina isn't on this phone yet. Get it from the store above, then open the link again.</p>
+    <p id="desktop" class="note hidden">Open this link on your phone to see the profile in the app.</p>
+    <p class="about"><a href="/apps/pradakshina/">About Pradakshina Counter</a></p>
   </main>
   <script>
-    // Only a real profile code goes into the app link; anything else just shows the store buttons.
     (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var show = function (id) { $(id).classList.remove('hidden'); };
+      var hide = function (id) { $(id).classList.add('hidden'); };
+      var ua = navigator.userAgent || '';
+      var android = /Android/i.test(ua);
+      var ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      var play = 'https://play.google.com/store/apps/details?id=app.pradakshina';
+
+      // Only a real profile code goes into the app link; anything else just shows the store badges.
       var m = location.pathname.match(/^\/u\/([a-hj-km-np-z2-9]{7})\/?$/) || location.search.match(/[?&]c=([a-hj-km-np-z2-9]{7})(?:&|$)/);
       if (!m) {
-        document.getElementById('title').textContent = 'Pradakshina Counter';
-        document.getElementById('text').textContent = 'This profile link is not complete. Ask for the link again, or scan their profile code in the app.';
+        $('title').textContent = 'Profile link not complete';
+        $('text').textContent = 'Ask for the link again, or scan their profile code in the app.';
         return;
       }
-      var open = document.getElementById('open');
-      open.href = 'pradakshina://u/' + m[1];
-      open.classList.remove('hidden');
+      var code = m[1];
+      $('codeValue').textContent = code;
+      show('code');
+
+      // On each phone, its own store first, alone.
+      if (android) { hide('apple'); $('stores').classList.add('one'); }
+      if (ios) { hide('play'); $('stores').classList.add('one'); }
+
+      if (android) {
+        // Android opens the app when it's there, and Google Play when it isn't: never an error page.
+        $('open').href = 'intent://u/' + code + '#Intent;scheme=pradakshina;package=app.pradakshina;S.browser_fallback_url=' + encodeURIComponent(play) + ';end';
+        show('open');
+      } else if (ios) {
+        // With the app installed, iPhone opens narnelabs.com/u/ links in it directly, so this page is
+        // mostly seen without the app: the App Store comes first, and opening is a quiet link.
+        $('iosOpen').href = 'pradakshina://u/' + code;
+        show('iosNote');
+        $('iosOpen').addEventListener('click', function () {
+          var left = false;
+          var gone = function () { left = true; };
+          document.addEventListener('visibilitychange', gone, { once: true });
+          window.addEventListener('pagehide', gone, { once: true });
+          setTimeout(function () { if (!left && !document.hidden) { hide('iosNote'); show('missing'); } }, 1600);
+        });
+      } else {
+        show('desktop');
+      }
     })();
   </script>
 </body>
