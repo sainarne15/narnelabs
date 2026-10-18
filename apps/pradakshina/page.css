@@ -1,0 +1,77 @@
+/* Pradakshina's pages only (the overview, privacy, delete and terms), on top of /assets/css/style.css:
+   one set of buttons, store badges side by side, the legal pages in one centred column, and tables
+   that read on a phone. */
+
+/* --- Store badges: the same size, side by side, never wrapping alone ------------------------------ */
+.store-row { display: grid; grid-template-columns: repeat(2, minmax(0, 200px)); gap: 12px; margin-top: 36px; }
+.store-badge {
+  display: flex; align-items: center; gap: 12px; height: 60px; padding: 0 18px;
+  border-radius: 14px; background: #000; color: #fff; border: 1px solid rgba(255, 255, 255, 0.28);
+  transition: transform .4s var(--ease), border-color .3s, box-shadow .3s;
+}
+.store-badge:hover { border-color: rgba(255, 255, 255, 0.6); box-shadow: 0 12px 36px -12px rgba(255, 140, 63, 0.55); transform: translateY(-2px); }
+.store-badge svg { flex: none; width: 26px; height: 26px; }
+.store-badge span { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.store-badge small { font-size: 11px; letter-spacing: .02em; opacity: .85; white-space: nowrap; }
+.store-badge b { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+.cta-band .store-row { margin: 32px auto 0; justify-content: center; }
+@media (max-width: 420px) {
+  .store-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .store-badge { height: 54px; padding: 0 12px; gap: 9px; }
+  .store-badge svg { width: 22px; height: 22px; }
+  .store-badge small { font-size: 9.5px; }
+  .store-badge b { font-size: 15.5px; }
+}
+
+/* A quiet link under the badges, instead of a third button. */
+.text-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-size: 15px; font-weight: 500; color: var(--muted); }
+.text-link:hover { color: var(--text); }
+.text-link .btn__arrow { color: var(--accent); }
+
+/* Buttons side by side: the same height and width; full width, stacked, on a phone. */
+.btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
+.btn-row .btn { min-width: 220px; justify-content: center; }
+@media (max-width: 520px) {
+  .btn-row { flex-direction: column; align-items: stretch; }
+  .btn-row .btn { min-width: 0; width: 100%; }
+}
+
+/* --- The section links: one row; on a phone it scrolls sideways instead of wrapping --------------- */
+@media (max-width: 700px) {
+  .subnav {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    margin: 0 calc(-1 * var(--gutter, 20px)) 40px; padding: 2px var(--gutter, 20px);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 28px), transparent);
+  }
+  .subnav::-webkit-scrollbar { display: none; }
+  .subnav a { flex: none; }
+}
+
+/* --- Legal pages: one centred column, the title with the text ------------------------------------- */
+.legal { max-width: 860px; margin: 0 auto; }
+.legal .page__hero { margin-bottom: 40px; }
+.legal .prose { max-width: none; }
+.legal .prose h2:first-child { margin-top: 0; }
+
+/* Tables become one card per row on a phone, each value with its column's name. */
+@media (max-width: 640px) {
+  .prose .table-wrap { border: 0; border-radius: 0; overflow: visible; }
+  .prose table { min-width: 0; font-size: 15px; }
+  .prose thead, .prose tr:has(th) { display: none; }
+  .prose table, .prose tbody, .prose tr, .prose td { display: block; width: 100%; }
+  .prose tr { border: 1px solid var(--line); border-radius: 14px; padding: 6px 0; margin-bottom: 12px; background: rgba(255, 255, 255, 0.02); }
+  .prose td { border-bottom: 0; padding: 8px 16px; }
+  .prose td::before { content: attr(data-label); display: block; margin-bottom: 4px; font: 500 10.5px var(--font-mono); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); }
+}
+
+/* --- Overview ---------------------------------------------------------------------------------------- */
+.product-hero .section__lede { max-width: 560px; }
+/* The fanned screenshots stay inside a phone screen. */
+@media (max-width: 600px) {
+  .phone-stack { height: 420px; }
+  .phone-stack img { width: 170px; }
+  .phone-stack img:nth-child(2) { transform: translate(-98%, -46%) rotateY(18deg) rotateZ(-5deg) scale(.8); }
+  .phone-stack img:nth-child(3) { transform: translate(-2%, -46%) rotateY(-18deg) rotateZ(5deg) scale(.8); }
+}
+.feature p { color: var(--muted); font-size: 15px; margin-top: 12px; }
