@@ -2,26 +2,13 @@
    one set of buttons, store badges side by side, the legal pages in one centred column, and tables
    that read on a phone. */
 
-/* --- Store badges: the same size, side by side, never wrapping alone ------------------------------ */
-.store-row { display: grid; grid-template-columns: repeat(2, minmax(0, 200px)); gap: 12px; margin-top: 36px; }
-.store-badge {
-  display: flex; align-items: center; gap: 12px; height: 60px; padding: 0 18px;
-  border-radius: 14px; background: #000; color: #fff; border: 1px solid rgba(255, 255, 255, 0.28);
-  transition: transform .4s var(--ease), border-color .3s, box-shadow .3s;
-}
-.store-badge:hover { border-color: rgba(255, 255, 255, 0.6); box-shadow: 0 12px 36px -12px rgba(255, 140, 63, 0.55); transform: translateY(-2px); }
-.store-badge svg { flex: none; width: 26px; height: 26px; }
-.store-badge span { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
-.store-badge small { font-size: 11px; letter-spacing: .02em; opacity: .85; white-space: nowrap; }
-.store-badge b { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
-.cta-band .store-row { margin: 32px auto 0; justify-content: center; }
-@media (max-width: 420px) {
-  .store-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .store-badge { height: 54px; padding: 0 12px; gap: 9px; }
-  .store-badge svg { width: 22px; height: 22px; }
-  .store-badge small { font-size: 9.5px; }
-  .store-badge b { font-size: 15.5px; }
-}
+/* --- Store badges: Apple's and Google's own images, the same height, side by side --------------- */
+.store-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 36px; }
+.store-badge { display: block; line-height: 0; border-radius: 10px; transition: transform .4s var(--ease), box-shadow .3s; }
+.store-badge:hover { transform: translateY(-2px); box-shadow: 0 12px 36px -12px rgba(255, 140, 63, 0.55); }
+.store-badge img { display: block; height: 56px; width: auto; }
+.cta-band .store-row { justify-content: center; }
+@media (max-width: 380px) { .store-row { gap: 10px; } .store-badge img { height: 46px; } }
 
 /* A quiet link under the badges, instead of a third button. */
 .text-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-size: 15px; font-weight: 500; color: var(--muted); }
