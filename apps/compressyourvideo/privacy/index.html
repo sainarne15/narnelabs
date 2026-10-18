@@ -20,6 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/style.css?v=202610031222" />
+  <link rel="stylesheet" href="/apps/compressyourvideo/page.css?v=202610181900" />
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body data-scene="lite" data-shape="0" class="theme-violet">
@@ -40,6 +41,7 @@
 
   <main class="page">
     <div class="container">
+      <div class="legal">
       <nav class="subnav" aria-label="Product">
         <a href="/apps/compressyourvideo/">Overview</a>
         <a href="/apps/compressyourvideo/privacy/" aria-current="page">Privacy & legal</a>
@@ -70,6 +72,7 @@
         </ul>
         <p>CompressYourVideo is a Narne Labs product.</p>
       </article>
+      </div>
     </div>
   </main>
 
@@ -80,6 +83,9 @@
     </div>
   </footer>
 
+  <script>
+    (function () { var n = document.querySelector('.subnav'), a = n && n.querySelector('[aria-current]'); if (n && a && n.scrollWidth > n.clientWidth) n.scrollLeft = a.offsetLeft - (n.clientWidth - a.offsetWidth) / 2; })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>

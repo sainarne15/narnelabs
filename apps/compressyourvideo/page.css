@@ -1,0 +1,73 @@
+/* CompressYourVideo's pages only (the overview and privacy & legal), on top of /assets/css/style.css.
+   The same system as Pradakshina's page.css: store badges side by side, one set of equal buttons,
+   section links that scroll on a phone, the legal page in one centred column. */
+
+/* --- Store badges: the same size, side by side, never wrapping alone ------------------------------ */
+.store-row { display: grid; grid-template-columns: repeat(2, minmax(0, 200px)); gap: 12px; margin-top: 36px; }
+.store-badge {
+  display: flex; align-items: center; gap: 12px; height: 60px; padding: 0 18px;
+  border-radius: 14px; background: #000; color: #fff; border: 1px solid rgba(255, 255, 255, 0.28);
+  transition: transform .4s var(--ease), border-color .3s, box-shadow .3s;
+}
+.store-badge:hover { border-color: rgba(255, 255, 255, 0.6); box-shadow: 0 12px 36px -12px rgba(124, 58, 237, 0.65); transform: translateY(-2px); }
+.store-badge svg { flex: none; width: 26px; height: 26px; }
+.store-badge span { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.store-badge small { font-size: 11px; letter-spacing: .02em; opacity: .85; white-space: nowrap; }
+.store-badge b { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+/* inside a feature card: one badge, left-aligned */
+.feature .store-row { grid-template-columns: minmax(0, 200px); margin-top: 24px; }
+@media (max-width: 420px) {
+  .store-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .feature .store-row { grid-template-columns: minmax(0, 1fr); }
+  .store-badge { height: 54px; padding: 0 12px; gap: 9px; }
+  .store-badge svg { width: 22px; height: 22px; }
+  .store-badge small { font-size: 9.5px; }
+  .store-badge b { font-size: 15.5px; }
+}
+
+/* A quiet link under the badges, instead of a third button. */
+.text-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-size: 15px; font-weight: 500; color: var(--muted); }
+.text-link:hover { color: var(--text); }
+.text-link .btn__arrow { color: var(--accent); }
+
+/* Buttons side by side: the same height and width; full width, stacked, on a phone. */
+.btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 32px; }
+.btn-row .btn { min-width: 220px; justify-content: center; }
+@media (max-width: 520px) {
+  .btn-row { flex-direction: column; align-items: stretch; }
+  .btn-row .btn { min-width: 0; width: 100%; }
+}
+
+/* --- The section links: one row; on a phone it scrolls sideways instead of wrapping --------------- */
+@media (max-width: 700px) {
+  .subnav {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    margin: 0 calc(-1 * var(--gutter, 20px)) 40px; padding: 2px var(--gutter, 20px);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 28px), transparent);
+  }
+  .subnav::-webkit-scrollbar { display: none; }
+  .subnav a { flex: none; }
+}
+
+/* --- Legal page: one centred column, the title with the text -------------------------------------- */
+.legal { max-width: 860px; margin: 0 auto; }
+.legal .page__hero { margin-bottom: 40px; }
+.legal .prose { max-width: none; }
+.legal .prose h2:first-child { margin-top: 0; }
+
+/* --- Overview ---------------------------------------------------------------------------------------- */
+.product-hero .section__lede { max-width: 560px; }
+/* The fanned screenshots stay inside a phone screen. */
+@media (max-width: 600px) {
+  .phone-stack { height: 420px; }
+  .phone-stack img { width: 170px; }
+  .phone-stack img:nth-child(2) { transform: translate(-98%, -46%) rotateY(18deg) rotateZ(-5deg) scale(.8); }
+  .phone-stack img:nth-child(3) { transform: translate(-2%, -46%) rotateY(-18deg) rotateZ(5deg) scale(.8); }
+}
+@media (max-width: 360px) {
+  .phone-stack { height: 360px; }
+  .phone-stack img { width: 146px; }
+}
+/* Long headline words never push past the screen on small phones. */
+@media (max-width: 420px) { .cta-band .section__title { font-size: 26px; } }
