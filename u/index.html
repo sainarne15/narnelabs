@@ -18,7 +18,7 @@
       font-family: 'Anek Latin', system-ui, -apple-system, 'Segoe UI', sans-serif; color: #FFF4E8;
       background: radial-gradient(120% 60% at 50% 0%, rgba(255, 138, 61, .28), transparent 60%), linear-gradient(180deg, #3A160B, #1C0906 40%, #0B0402); }
     main { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .icon { width: 88px; height: 88px; border-radius: 22px; box-shadow: 0 16px 44px -10px rgba(255, 140, 63, .55); }
+    .icon { width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 16px 44px -10px rgba(255, 140, 63, .55); }
     .app { margin-top: 14px; font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 236, 218, .55); }
     h1 { margin-top: 10px; font-weight: 800; font-size: 30px; line-height: 1.15; letter-spacing: -.5px; }
     p { margin-top: 10px; font-weight: 500; font-size: 16px; line-height: 1.5; color: rgba(255, 236, 218, .7); }
@@ -28,35 +28,36 @@
     .open { margin-top: 28px; width: 100%; height: 56px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
       font-weight: 800; font-size: 17px; text-decoration: none; color: #2B0E04; background: linear-gradient(135deg, #FFC766, #FF8C3F 55%, #EF5A2E);
       box-shadow: 0 10px 30px rgba(255, 138, 61, .35); }
-    .stores { margin-top: 28px; width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .open + .stores { margin-top: 14px; }
-    .stores.one { grid-template-columns: 1fr; max-width: 240px; }
-    .badge { display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; padding: 0 12px; border-radius: 14px;
-      background: #000; color: #fff; text-decoration: none; border: 1px solid rgba(255, 255, 255, .28); }
-    .badge svg { flex: none; width: 24px; height: 24px; }
-    .badge span { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; min-width: 0; }
-    .badge small { font-size: 10px; letter-spacing: .02em; opacity: .85; white-space: nowrap; }
-    .badge b { font-size: 17px; font-weight: 600; white-space: nowrap; }
+    .stores { margin-top: 28px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
+    .open + .stores { margin-top: 16px; }
+    .badge { display: block; line-height: 0; border-radius: 10px; }
+    .badge img { display: block; height: 54px; width: auto; }
     .note { margin-top: 14px; font-size: 14px; color: rgba(255, 236, 218, .62); }
     .note a { color: #FFA24C; font-weight: 700; text-decoration: none; }
     .about { margin-top: 32px; font-size: 14px; }
     .about a { color: rgba(255, 236, 218, .55); }
     .hidden { display: none !important; }
-    @media (max-width: 360px) { .badge { gap: 8px; padding: 0 8px; } .badge b { font-size: 15px; } .badge small { font-size: 9px; } h1 { font-size: 26px; } }
+    @media (max-width: 360px) { .badge img { height: 46px; } h1 { font-size: 26px; } }
+    .person { margin-top: 22px; width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255, 199, 102, .55); box-shadow: 0 12px 34px -10px rgba(255, 140, 63, .6); }
+    .initial { display: grid; place-items: center; background: rgba(255, 199, 102, .14); font-weight: 800; font-size: 40px; color: #FFC766; }
+    .meta { margin-top: 6px; font-weight: 600; font-size: 15px; color: rgba(255, 236, 218, .62); }
   </style>
 </head>
 <body>
   <main>
-    <img class="icon" src="/apps/pradakshina/img/icon-512.png" alt="" width="88" height="88" />
+    <img class="icon" src="/apps/pradakshina/img/icon-512.png?v=202610181830" alt="" width="64" height="64" />
     <div class="app">Pradakshina Counter</div>
+    <img id="avatar" class="person hidden" alt="" referrerpolicy="no-referrer" width="96" height="96" />
+    <div id="initial" class="person initial hidden" aria-hidden="true"></div>
     <h1 id="title">A devotee's profile</h1>
+    <div id="meta" class="meta hidden"></div>
     <p id="text">See their title, rounds and badges, and add them as a friend, in the app.</p>
     <div id="code" class="code hidden">Profile code <b id="codeValue"></b></div>
 
     <a id="open" class="open hidden" href="#">Open in Pradakshina</a>
     <div id="stores" class="stores">
-      <a id="play" class="badge" href="https://play.google.com/store/apps/details?id=app.pradakshina" aria-label="Get it on Google Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 2.2c-.27.28-.43.72-.43 1.29v17.02c0 .57.16 1.01.43 1.29l.07.07 9.53-9.53v-.22L3.67 2.13z"/><path fill="#FBBC04" d="M16.38 15.53 13.2 12.35v-.22l3.18-3.18.07.04 3.77 2.14c1.08.61 1.08 1.61 0 2.22l-3.77 2.14z"/><path fill="#EA4335" d="m16.45 15.49-3.25-3.25-9.6 9.6c.36.38.94.42 1.6.05l11.25-6.4"/><path fill="#4285F4" d="M16.45 8.99 5.2 2.6c-.66-.38-1.24-.33-1.6.05l9.6 9.59z"/></svg><span><small>GET IT ON</small><b>Google Play</b></span></a>
-      <a id="apple" class="badge" href="https://apps.apple.com/app/id6818906398" aria-label="Download on the App Store"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.77-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.1 1.76-.96 2.8 1.01.08 2.05-.52 2.68-1.28z"/></svg><span><small>Download on the</small><b>App Store</b></span></a>
+      <a id="play" class="badge" href="https://play.google.com/store/apps/details?id=app.pradakshina"><img src="/apps/pradakshina/img/badge-google-play.png?v=202610181830" alt="Get it on Google Play" height="54" /></a>
+      <a id="apple" class="badge" href="https://apps.apple.com/app/id6818906398"><img src="/apps/pradakshina/img/badge-app-store.svg?v=202610181830" alt="Download on the App Store" height="54" /></a>
     </div>
     <p id="iosNote" class="note hidden">Already have the app? <a id="iosOpen" href="#">Open the profile</a></p>
     <p id="missing" class="note hidden">Pradakshina isn't on this phone yet. Get it from the store above, then open the link again.</p>
@@ -83,6 +84,47 @@
       var code = m[1];
       $('codeValue').textContent = code;
       show('code');
+
+      // Their name and picture, as the app shows them to anyone (a Friends only profile: just those).
+      // The project's public key, the same one the app carries; the server decides what it may see.
+      var api = 'https://gxxgyjsmoyflviofbsis.supabase.co/rest/v1/rpc/', key = 'sb_publishable_mQ2UYy5JXdPbdrGksrVjgQ_z-Y23oai';
+      var rpc = function (fn, body) {
+        return fetch(api + fn, { method: 'POST', headers: { apikey: key, Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+          .then(function (r) { return r.ok ? r.json() : null; });
+      };
+      rpc('profile_by_code', { c: code })
+        .then(function (uid) {
+          if (!uid) {
+            $('title').textContent = 'Profile not found';
+            $('text').textContent = 'This code doesn’t match a profile. It may have been renewed: ask for the link again.';
+            hide('code');
+            return null;
+          }
+          return rpc('profile_view', { uid: uid });
+        })
+        .then(function (v) {
+          if (!v || !v.name) return;
+          var name = String(v.name).trim();
+          $('title').textContent = name;
+          document.title = name + ' · Pradakshina Counter';
+          $('text').textContent = 'See their title, rounds and badges, and add them as a friend, in the app.';
+          if (v.avatar_url && /^https:\/\//.test(v.avatar_url)) {
+            $('avatar').src = v.avatar_url;
+            $('avatar').onerror = function () { hide('avatar'); $('initial').textContent = name.charAt(0).toUpperCase(); show('initial'); };
+            show('avatar');
+          } else {
+            $('initial').textContent = name.charAt(0).toUpperCase();
+            show('initial');
+          }
+          if (v.kind === 'full') {
+            var r = Number(v.rounds) || 0, t = Number(v.temples) || 0;
+            var parts = [];
+            if (r > 0) parts.push(r.toLocaleString('en-US') + (r === 1 ? ' round' : ' rounds'));
+            if (t > 0) parts.push(t.toLocaleString('en-US') + (t === 1 ? ' temple' : ' temples'));
+            if (parts.length) { $('meta').textContent = parts.join(' · '); show('meta'); }
+          }
+        })
+        .catch(function () {});
 
       // On each phone, its own store first, alone.
       if (android) { hide('apple'); $('stores').classList.add('one'); }
